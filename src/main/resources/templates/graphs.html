@@ -1,21 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
-    <title>WebJars Demo</title>
+    <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>Connected Graphs</title>
     <link rel="stylesheet"
-          href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
+          href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
     <title>Connected Graphs</title>
 </head>
 <body>
-    <div>GRAPHS VIEW</div>
     <div class="container"><br/>
-        <div class="alert alert-success">
+        <div class="alert alert-info">
             <a href="#" class="close" data-dismiss="alert"
                aria-label="close">×</a>
-            <strong>Success!</strong> It is working as we expected.
+            <strong>Select "Connect Vertices"</strong> - edges will be randomly added until the graph is connected.<br/>
+            Provide the number of vertices, denoted by N.
+            <hr/>
+            <strong>Select "Run Simulation"</strong> - a pre-defined simulation for N=2 to N=500 will be executed, with <br/>
+            the number of edges it takes to connect the graph (x-axis) plotted against N (y-axis).
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md containerShadow">
+                <form>
+                    <div class="form-group">
+                        <label for="numVertices"></label>
+                        <input type="email" class="form-control" id="numVertices" aria-describedby="numVertices" placeholder="# Vertices (N)">
+                        <small id="numVerticesHelp" class="form-text text-muted">Numeric values only. Uni-directional (Default)</small>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="biDirectional">
+                        <label class="form-check-label" for="biDirectional">Bi-directional</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Connect Vertices</button>
+                </form>
+            </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm containerShadow">
+                <button class="btn btn-secondary" style="margin-top: 20px;">Run Simulation</button>
+                <br/>
+                <p>Explanation of simulation and it's variables.</p>
+            </div>
+        </div>
+        <hr/>
+        <div class="row" style="border-style: solid; border-width: 1px;">
+            <canvas id="myCanvas"></canvas>
         </div>
     </div>
 </body>
