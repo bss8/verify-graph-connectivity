@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright (c) 2019. Borislav S. Sabotinov
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -14,8 +14,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.containerShadow {
-  border:1px solid #cecece;
-  box-shadow: 3px 3px 5px 6px #ccc;
-  padding-bottom: 10px;
-}
+$(document).ready(function () {
+    let numVerticesInput = $('#numVertices');
+    let biDirectionalSelect = $('#biDirectional');
+    let connectVerticesBtn = $('#connectVerticesBtn');
+    let runSimulationBtn = $('#runSimulationBtn');
+
+
+
+    connectVerticesBtn.click(function () {
+        let numVertices = numVerticesInput.val();
+        let isBiDirectional = biDirectionalSelect.is(':checked');
+
+        console.log("N: " + numVertices);
+        console.log("isBiDirectional: " + isBiDirectional);
+
+
+    });
+
+    runSimulationBtn.click(function () {
+
+    });
+
+});

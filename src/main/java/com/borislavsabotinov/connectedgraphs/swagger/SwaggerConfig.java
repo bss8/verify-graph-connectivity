@@ -27,8 +27,8 @@ public class SwaggerConfig {
         return new ApiInfoBuilder().title("Spring Boot REST API")
                 .description("Connected Graphs REST API")
                 .contact(new Contact("Boris", "borislavsabotinov.com", "contact@borislavsabotinov.com"))
-                .license("Apache 2.0")
-                .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
+                .license("GNU Affero General Public License")
+                .licenseUrl("http://www.gnu.org/licenses/")
                 .version("1.0.0")
                 .build();
     }
