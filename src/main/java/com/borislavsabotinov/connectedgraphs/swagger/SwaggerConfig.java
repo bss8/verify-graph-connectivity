@@ -1,4 +1,4 @@
-package com.example.connectedgraphs.swagger;
+package com.borislavsabotinov.connectedgraphs.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

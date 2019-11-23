@@ -2,7 +2,8 @@
 
 ## Dependencies
 
-- Maven 3.x
+- Maven 3.3.9
+- JDK 1.8.0_121 
 - Firebase CLI
 - Google Cloud CLI
 
@@ -10,11 +11,14 @@
 ## Build the back-end
 In the main project directory, where `pom.xml` resides, execute:
 `mvn clean package`
- Maven will build the project and generate a `target` directory, which will contain the project JAR package.
- 
+Maven will build the project and generate a `target` directory, which will contain the project JAR package.
+To build and skip unit tests, execute:
+`mvn clean package -DskipTests`
+
 ## Build the front-end
 
 ## Run the back-end
+
 With the back-end built and `target` directory with JAR present, execute:
 `java -jar connectedgraphs-*.jar`
 Open a browser and navigate to:
