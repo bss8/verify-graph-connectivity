@@ -1,9 +1,10 @@
 # Getting Started
 
 ## Dependencies
-
+To build:
 - Maven 3.3.9
-- JDK 1.8.0_121 
+- JDK 1.8.0_121
+To deploy: 
 - Firebase CLI
 - Google Cloud CLI
 
