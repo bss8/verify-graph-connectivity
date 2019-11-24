@@ -31,8 +31,8 @@ import java.util.Map;
  * Use @Override annotation to take advantage of the compiler checking to make sure you actually are overriding a method.
  * @param <T>
  */
-public class BasicGraph<T extends Comparable<? super T>> implements Graph<T> {
-    private Map<Vertex, List<Vertex>> adjacencyMap;
+public abstract class BasicGraph<T extends Comparable<? super T>> implements Graph<T> {
+    Map<Vertex, List<Vertex>> adjacencyMap;
 
     BasicGraph() {
         this.adjacencyMap = new HashMap<Vertex, List<Vertex>>();
@@ -55,24 +55,10 @@ public class BasicGraph<T extends Comparable<? super T>> implements Graph<T> {
     }
 
     @Override
-    public void addEdge(T value1, T value2) {
-        Vertex v1 = new Vertex(value1);
-        Vertex v2 = new Vertex(value2);
-        adjacencyMap.get(v1).add(v2);
-        adjacencyMap.get(v2).add(v1);
-    }
+    public abstract void addEdge(T value1, T value2);
 
     @Override
-    public void removeEdge(T value1, T value2) {
-        Vertex v1 = new Vertex(value1);
-        Vertex v2 = new Vertex(value2);
-        List<Vertex> eV1 = adjacencyMap.get(v1);
-        List<Vertex> eV2 = adjacencyMap.get(v2);
-        if (eV1 != null)
-            eV1.remove(v2);
-        if (eV2 != null)
-            eV2.remove(v1);
-    }
+    public abstract void removeEdge(T value1, T value2);
 
     @Override
     public List<Vertex> getAdjacentVertices(T value) {
@@ -124,27 +110,4 @@ public class BasicGraph<T extends Comparable<? super T>> implements Graph<T> {
             return BasicGraph.this;
         }
     }
-
-
-    public static void main(String...args) {
-        BasicGraph<String> graph = new BasicGraph<>();
-        graph.createGraph(graph);
-        System.out.println(graph.toString());
-        System.out.println(graph.getAdjacentVertices("Maria").toString());
-    }
-
-    void createGraph(BasicGraph<String> graph) {
-
-        graph.addVertex("Bob");
-        graph.addVertex("Alice");
-        graph.addVertex("Mark");
-        graph.addVertex("Rob");
-        graph.addVertex("Maria");
-        graph.addEdge("Bob", "Alice");
-        graph.addEdge("Bob", "Rob");
-        graph.addEdge("Alice", "Mark");
-        graph.addEdge("Rob", "Mark");
-        graph.addEdge("Alice", "Maria");
-        graph.addEdge("Rob", "Maria");
-    }
-}
+} // end abstract class BasicGraph
