@@ -21,63 +21,73 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BasicGraph implements Graph {
-    private Map<Vertex, List<Vertex>> adjVertices;
+/**
+ * Adjacency list is used to represent the graph.
+ * Generic T is used to ensure Graph can support multiple types, as long as T extends the Comparable class.
+ *
+ * {@code <? super T>} T is the lower bound for the wildcard ?
+ * {@code extends Comparable<? super T>} type T must implement Comparable of T or one of its super classes
+ *
+ * Use @Override annotation to take advantage of the compiler checking to make sure you actually are overriding a method.
+ * @param <T>
+ */
+public class BasicGraph<T extends Comparable<? super T>> implements Graph<T> {
+    private Map<Vertex, List<Vertex>> adjacencyMap;
 
     BasicGraph() {
-        this.adjVertices = new HashMap<Vertex, List<Vertex>>();
+        this.adjacencyMap = new HashMap<Vertex, List<Vertex>>();
     }
 
-    void addVertex(String label) {
-        adjVertices.putIfAbsent(new Vertex(label), new ArrayList<>());
+    /**
+     * Only add value if the specified key is not already associated with a value.
+     * @param value
+     */
+    @Override
+    public void addVertex(T value) {
+        adjacencyMap.putIfAbsent(new Vertex(value), new ArrayList<>());
     }
 
-    void removeVertex(String label) {
-        Vertex v = new Vertex(label);
-        adjVertices.values().stream().forEach(e -> e.remove(v));
-        adjVertices.remove(new Vertex(label));
+    @Override
+    public void removeVertex(T value) {
+        Vertex v = new Vertex(value);
+        adjacencyMap.values().stream().forEach(e -> e.remove(v));
+        adjacencyMap.remove(new Vertex(value));
     }
 
-    void addEdge(String label1, String label2) {
-        Vertex v1 = new Vertex(label1);
-        Vertex v2 = new Vertex(label2);
-        adjVertices.get(v1).add(v2);
-        adjVertices.get(v2).add(v1);
+    @Override
+    public void addEdge(T value1, T value2) {
+        Vertex v1 = new Vertex(value1);
+        Vertex v2 = new Vertex(value2);
+        adjacencyMap.get(v1).add(v2);
+        adjacencyMap.get(v2).add(v1);
     }
 
-    void removeEdge(String label1, String label2) {
-        Vertex v1 = new Vertex(label1);
-        Vertex v2 = new Vertex(label2);
-        List<Vertex> eV1 = adjVertices.get(v1);
-        List<Vertex> eV2 = adjVertices.get(v2);
+    @Override
+    public void removeEdge(T value1, T value2) {
+        Vertex v1 = new Vertex(value1);
+        Vertex v2 = new Vertex(value2);
+        List<Vertex> eV1 = adjacencyMap.get(v1);
+        List<Vertex> eV2 = adjacencyMap.get(v2);
         if (eV1 != null)
             eV1.remove(v2);
         if (eV2 != null)
             eV2.remove(v1);
     }
 
-    List<Vertex> getAdjVertices(String label) {
-        return adjVertices.get(new Vertex(label));
-    }
-
-    String printGraph() {
-        StringBuffer sb = new StringBuffer();
-        for(Vertex v : adjVertices.keySet()) {
-            sb.append(v);
-            sb.append(adjVertices.get(v));
-        }
-        return sb.toString();
+    @Override
+    public List<Vertex> getAdjacentVertices(T value) {
+        return adjacencyMap.get(new Vertex(value));
     }
 
     @Override
     public String toString() {
-        return this.adjVertices.toString();
+        return this.adjacencyMap.toString();
     }
 
     class Vertex {
-        String label;
-        Vertex(String label) {
-            this.label = label;
+        T value;
+        Vertex(T value) {
+            this.value = value;
         }
 
         @Override
@@ -85,7 +95,7 @@ public class BasicGraph implements Graph {
             final int prime = 31;
             int result = 1;
             result = prime * result + getOuterType().hashCode();
-            result = prime * result + ((label == null) ? 0 : label.hashCode());
+            result = prime * result + ((value == null) ? 0 : value.hashCode());
             return result;
         }
 
@@ -100,33 +110,30 @@ public class BasicGraph implements Graph {
             Vertex other = (Vertex) obj;
             if (!getOuterType().equals(other.getOuterType()))
                 return false;
-            if (label == null) {
-                if (other.label != null)
-                    return false;
-            } else if (!label.equals(other.label))
-                return false;
-            return true;
+            if (value == null) {
+                return other.value == null;
+            } else return value.equals(other.value);
         }
 
         @Override
         public String toString() {
-            return label;
+            return value.toString();
         }
 
-
-        private BasicGraph getOuterType() {
+        private BasicGraph<T> getOuterType() {
             return BasicGraph.this;
         }
     }
 
 
     public static void main(String...args) {
-        BasicGraph graph = new BasicGraph();
+        BasicGraph<String> graph = new BasicGraph<>();
         graph.createGraph(graph);
-        System.out.print(graph.toString());
+        System.out.println(graph.toString());
+        System.out.println(graph.getAdjacentVertices("Maria").toString());
     }
 
-    void createGraph(BasicGraph graph) {
+    void createGraph(BasicGraph<String> graph) {
 
         graph.addVertex("Bob");
         graph.addVertex("Alice");
