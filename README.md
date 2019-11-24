@@ -13,6 +13,7 @@ Developed with a `Mobile First` approach.
 
 REST API: Spring Boot 2.2.1.RELEASE
 Templating Engine: Thymeleaf
+Java testing: JUnit 5 Jupiter
 Client-side: JQuery 3.4.1
 UI: Bootstrap 4.3.1 
 
