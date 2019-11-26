@@ -16,8 +16,10 @@
 
 package com.borislavsabotinov.connectedgraphs.controllers;
 
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,5 +30,17 @@ public class BaseController {
     @GetMapping("/hello")
     String hello() {
         return "Graphs says Hello " + message + "!";
+    }
+
+    @GetMapping("/api/executePredefinedSimulation")
+    void executePredefinedSimulation() {
+        // TODO: execute predefined simulation model with static values
+    }
+
+    @GetMapping("/api/passGraphParams")
+    void passGraphParams(@RequestParam String numVertices, @RequestParam String isBiDirectional) {
+        Logger logger = Logger.getLogger(BaseController.class.getName());
+        logger.info("numVertices: " + numVertices);
+        logger.info("isBiDirectional: " + isBiDirectional);
     }
 }

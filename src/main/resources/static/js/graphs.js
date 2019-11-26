@@ -19,8 +19,8 @@ $(document).ready(function () {
     let biDirectionalSelect = $('#biDirectional');
     let connectVerticesBtn = $('#connectVerticesBtn');
     let runSimulationBtn = $('#runSimulationBtn');
-
-
+    let origin = window.location.origin;
+    console.log(origin);
 
     connectVerticesBtn.click(function () {
         let numVertices = numVerticesInput.val();
@@ -29,6 +29,12 @@ $(document).ready(function () {
         console.log("N: " + numVertices);
         console.log("isBiDirectional: " + isBiDirectional);
 
+        $.get(origin + "/api/passGraphParams", {
+            "numVertices": numVertices,
+            "isBiDirectional": isBiDirectional,
+        }) .done(function( data ) {
+            alert( "Data Loaded: " + data );
+        });
 
     });
 
