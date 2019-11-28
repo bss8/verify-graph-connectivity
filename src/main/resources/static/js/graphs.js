@@ -19,7 +19,9 @@ $(document).ready(function () {
     let biDirectionalSelect = $('#biDirectional');
     let connectVerticesBtn = $('#connectVerticesBtn');
     let runSimulationBtn = $('#runSimulationBtn');
+    let stringType = $('#strType');
     let origin = window.location.origin;
+
     console.log(origin);
 
     connectVerticesBtn.click(function () {
@@ -31,15 +33,18 @@ $(document).ready(function () {
 
         $.get(origin + "/api/passGraphParams", {
             "numVertices": numVertices,
-            "isBiDirectional": isBiDirectional,
-        }) .done(function( data ) {
-            alert( "Data Loaded: " + data );
+            "isBiDirectional": isBiDirectional
+        }) .done(function(data) {
+            console.log( "Invoking /api/passGraphParams for a single graph." + data );
         });
 
     });
 
     runSimulationBtn.click(function () {
-
+        $.get(origin + "/api/executePredefinedSimulation")
+            .done(function() {
+                console.log( "Invoking /api/executePredefinedSimulation for a simulation with preset values.");
+        });
     });
 
 });

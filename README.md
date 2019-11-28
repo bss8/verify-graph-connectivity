@@ -1,11 +1,10 @@
-# Getting Started
+# Mircroservice: Verify-Graph-Connectivity
 
 ## Dependencies
 To build:
 - Maven 3.3.9
 - JDK 1.8.0_121
 To deploy: 
-- Firebase CLI
 - Google Cloud CLI
 
 ## Technology Stack
@@ -23,8 +22,6 @@ In the main project directory, where `pom.xml` resides, execute:
 Maven will build the project and generate a `target` directory, which will contain the project JAR package.
 To build and skip unit tests, execute:
 `mvn clean package -DskipTests`
-
-## Build the front-end
 
 ## Run the back-end
 
@@ -49,13 +46,6 @@ http://localhost:8080/api/swagger-ui.html
     - Select [1] Cloud Run (fully managed) for the target platform
     - Select [3] us-central1 for the region
     - Press `Enter` to select the default for service name (connectedgraphs)
-    
-## Deploy the front-end
-To deploy the full client-side app:
-`firebase deploy`
-To deploy only functions:
-
-To deploy everything except functions:
 
 ### Reference Documentation
 For further reference, please consider the following sections:

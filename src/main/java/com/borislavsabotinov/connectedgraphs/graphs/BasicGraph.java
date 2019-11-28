@@ -33,9 +33,12 @@ import java.util.Map;
  */
 public abstract class BasicGraph<T extends Comparable<? super T>> implements Graph<T> {
     Map<Vertex, List<Vertex>> adjacencyMap;
+    final Class<T> type;
+    int numVertices;
 
-    BasicGraph() {
+    BasicGraph(Class<T> type) {
         this.adjacencyMap = new HashMap<Vertex, List<Vertex>>();
+        this.type = type;
     }
 
     /**
@@ -68,6 +71,18 @@ public abstract class BasicGraph<T extends Comparable<? super T>> implements Gra
     @Override
     public String toString() {
         return this.adjacencyMap.toString();
+    }
+
+    public Class<T> getMyType() {
+        return this.type;
+    }
+
+    public int getNumVertices() {
+        return numVertices;
+    }
+
+    public void setNumVertices(int numVertices) {
+        this.numVertices = numVertices;
     }
 
     class Vertex {

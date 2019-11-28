@@ -27,6 +27,9 @@ import java.util.Stack;
  */
 public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGraph<T> {
 
+    BiDirectionalGraph(Class<T> type) {
+        super(type);
+    }
 
     @Override
     public void addEdge(T value1, T value2) {
@@ -64,8 +67,12 @@ public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGr
         return visited;
     }
 
+    public Class<T> getMyType() {
+        return this.type;
+    }
+
     public static void main(String...args) {
-        BiDirectionalGraph<String> graph = new BiDirectionalGraph<>();
+        BiDirectionalGraph<String> graph = new BiDirectionalGraph<>(String.class);
         graph.createGraph(graph);
         System.out.println(graph.toString());
         System.out.println(graph.getAdjacentVertices("Maria").toString());

@@ -27,7 +27,7 @@ class BiDirectionalGraphTest {
 
     @BeforeEach
     void init() {
-        graph = new BiDirectionalGraph<>();
+        graph = new BiDirectionalGraph<>(String.class);
         graph.addVertex("Bob");
         graph.addVertex("Alice");
         graph.addVertex("Mark");

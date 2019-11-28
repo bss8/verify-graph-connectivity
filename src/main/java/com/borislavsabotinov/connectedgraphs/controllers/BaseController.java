@@ -17,6 +17,9 @@
 package com.borislavsabotinov.connectedgraphs.controllers;
 
 import java.util.logging.Logger;
+
+import com.borislavsabotinov.connectedgraphs.graphs.*;
+import com.borislavsabotinov.connectedgraphs.simulation.Driver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,5 +45,15 @@ public class BaseController {
         Logger logger = Logger.getLogger(BaseController.class.getName());
         logger.info("numVertices: " + numVertices);
         logger.info("isBiDirectional: " + isBiDirectional);
+
+        Graph<String> graph = GraphTypeFactory.generateGraphClassInstance(Boolean.parseBoolean(isBiDirectional));
+        if (graph instanceof UniDirectionalGraph) {
+            logger.info("Graph is instance of UniDirectional class.");
+            logger.info("Data type: " + ((UniDirectionalGraph<String>) graph).getMyType().toString());
+            Driver driver = new Driver(graph);
+        } else if (graph instanceof BiDirectionalGraph) {
+            logger.info("Graph is instance of BiDirectional class.");
+            logger.info("Data type: " + ((BiDirectionalGraph<String>) graph).getMyType().toString());
+        }
     }
 }

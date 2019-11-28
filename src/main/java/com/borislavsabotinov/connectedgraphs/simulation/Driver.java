@@ -16,5 +16,23 @@
 
 package com.borislavsabotinov.connectedgraphs.simulation;
 
+import com.borislavsabotinov.connectedgraphs.graphs.BiDirectionalGraph;
+import com.borislavsabotinov.connectedgraphs.graphs.Graph;
+import com.borislavsabotinov.connectedgraphs.graphs.UniDirectionalGraph;
+
 public class Driver {
+    Graph<String> graph;
+
+    public Driver(Graph<String> graph) {
+        this.graph = graph;
+    }
+
+    public void determineConnectivity() {
+
+    }
+
+    //given numVertices, generate random vertex values
+
+    //add edge at random
+
 }

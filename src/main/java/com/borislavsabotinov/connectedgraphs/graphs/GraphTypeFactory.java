@@ -16,27 +16,13 @@
 
 package com.borislavsabotinov.connectedgraphs.graphs;
 
-/**
- *
- * @param <T>
- */
-public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicGraph<T>  {
+public class GraphTypeFactory {
 
-    UniDirectionalGraph(Class<T> type) {
-        super(type);
+    public static BasicGraph<String> generateGraphClassInstance(boolean isBiDirectional) {
+        if(isBiDirectional) {
+            return new BiDirectionalGraph<>(String.class);
+        } else {
+            return new UniDirectionalGraph<>(String.class);
+        }
     }
-
-    @Override
-    public void addEdge(T value1, T value2) {
-
-    }
-
-    @Override
-    public void removeEdge(T value1, T value2) {
-
-    }
-
-    public Class<T> getMyType() {
-        return this.type;
-    }
-} // end class UniDirectionalGraph
+}
