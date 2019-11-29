@@ -32,6 +32,9 @@ public class Driver {
     BiDirectionalGraph<String> biDirectionalGraph;
     UniDirectionalGraph<String> uniDirectionalGraph;
 
+    public Driver() {
+    }
+
     public Driver(BiDirectionalGraph<String> biDirectionalGraph) {
         this.biDirectionalGraph = biDirectionalGraph;
     }
@@ -113,7 +116,7 @@ public class Driver {
     }
 
     public ArrayList<Integer[]> executePredefinedSimulation() {
-        int numVertices = 500;  // equivalent to # of runs
+        int numVertices = 10;  // equivalent to # of runs
         biDirectionalGraph = new BiDirectionalGraph<>(String.class);
         uniDirectionalGraph = new UniDirectionalGraph<>(String.class);
         Integer[] uniDirectionalResults = new Integer[numVertices];

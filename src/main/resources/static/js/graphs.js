@@ -18,9 +18,9 @@ $(document).ready(function () {
     let numVerticesInput = $('#numVertices');
     let biDirectionalSelect = $('#biDirectional');
     let connectVerticesBtn = $('#connectVerticesBtn');
-    let runSimulationBtn = $('#runSimulationBtn');
-    let stringType = $('#strType');
+    let predefinedSimulationBtn = $('#predefinedSimulationBtn');
     let origin = window.location.origin;
+    let body = $("body");
 
     console.log(origin);
 
@@ -41,10 +41,13 @@ $(document).ready(function () {
 
     });
 
-    runSimulationBtn.click(function () {
+    predefinedSimulationBtn.click(function () {
+        body.addClass("loading");
         $.get(origin + "/api/executePredefinedSimulation")
-            .done(function() {
-                console.log( "Invoking /api/executePredefinedSimulation for a simulation with preset values.");
+            .done(function(data) {
+                console.log( "Invoking /api/executePredefinedSimulation for a simulation with preset values. \n" +
+                    "Results: " + data);
+                body.removeClass("loading");
         });
     });
 

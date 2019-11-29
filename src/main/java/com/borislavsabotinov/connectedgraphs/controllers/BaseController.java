@@ -16,6 +16,7 @@
 
 package com.borislavsabotinov.connectedgraphs.controllers;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.borislavsabotinov.connectedgraphs.graphs.*;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class BaseController {
+    Logger logger = Logger.getLogger(BaseController.class.getName());
     @Value("${TARGET:World}")
     String message;
 
@@ -36,13 +38,16 @@ public class BaseController {
     }
 
     @GetMapping("/api/executePredefinedSimulation")
-    void executePredefinedSimulation() {
-        // TODO: execute predefined simulation model with static values
+    ArrayList<Integer[]> executePredefinedSimulation() {
+        Driver driver = new Driver();
+        ArrayList<Integer[]> simResults = driver.executePredefinedSimulation();
+        logger.info("simResults: " + simResults.toString());
+        return simResults;
     }
 
     @GetMapping("/api/passGraphParams")
     int passGraphParams(@RequestParam String numVertices, @RequestParam String isBiDirectional) {
-        Logger logger = Logger.getLogger(BaseController.class.getName());
+
         logger.info("numVertices: " + numVertices);
         logger.info("isBiDirectional: " + isBiDirectional);
 
