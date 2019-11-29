@@ -16,8 +16,12 @@
 
 package com.borislavsabotinov.connectedgraphs.graphs;
 
+import java.util.Set;
+
 /**
- * TODO: develop class functionality - include interface and helper methods
+ * Uni-directional, also referred to as a directed, graph.
+ * When an edge is added from A to B, <strong>NO</strong> edge is added from B to A.
+ * This means we cannot reach A if we start from B - movement is in one direction only.
  * @param <T>
  */
 public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicGraph<T>  {
@@ -27,16 +31,40 @@ public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicG
     }
 
     @Override
-    public boolean addEdge(T value1, T value2) {
+    public boolean addEdge(T fromValue1, T toValue2) {
         return false;
     }
 
     @Override
-    public void removeEdge(T value1, T value2) {
+    public void removeEdge(T fromValue1, T toValue2) {
 
+    }
+
+    @Override
+    public Set<T> depthFirstSearch(T root) {
+        return null;
+    }
+
+    @Override
+    public Set<T> breadthFirstSearch(T root) {
+        return null;
     }
 
     public Class<T> getMyType() {
         return this.type;
+    }
+
+    @Override
+    public boolean isConnected(T root) {
+        return false;
+    }
+
+    public static void main(String...args) {
+        UniDirectionalGraph<String> graph = new UniDirectionalGraph<>(String.class);
+        graph.initGraph(graph);
+        System.out.println(graph.toString());
+        System.out.println(graph.getAdjacentVertices("Stephanie").toString());
+        boolean isConnected = graph.isConnected("Suresh");
+        System.out.println("Is connected? " + isConnected);
     }
 } // end class UniDirectionalGraph

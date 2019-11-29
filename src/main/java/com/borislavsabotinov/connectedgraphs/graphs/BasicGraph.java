@@ -31,7 +31,7 @@ import java.util.Map;
  * Use @Override annotation to take advantage of the compiler checking to make sure you actually are overriding a method.
  * @param <T>
  */
-public abstract class BasicGraph<T extends Comparable<? super T>> implements Graph<T> {
+public abstract class BasicGraph<T extends Comparable<? super T>> implements Graph<T>, GraphTraversal<T> {
     Map<Vertex, List<Vertex>> adjacencyMap;
     final Class<T> type;
     int numVertices;
@@ -86,6 +86,29 @@ public abstract class BasicGraph<T extends Comparable<? super T>> implements Gra
     @Override
     public void setNumVertices(int numVertices) {
         this.numVertices = numVertices;
+    }
+
+    @Override
+    public abstract boolean isConnected(T root);
+
+    /**
+     * Helper method to populate the graph with test data
+     * Five vertices and 6 edges
+     * @param graph
+     */
+    void initGraph(BasicGraph<String> graph) {
+        graph.addVertex("Suresh");
+        graph.addVertex("Meyyappan");
+        graph.addVertex("Pawel");
+        graph.addVertex("Carolyn");
+        graph.addVertex("Stephanie");
+        graph.setNumVertices(5);
+        graph.addEdge("Suresh", "Meyyappan");
+        graph.addEdge("Suresh", "Carolyn");
+        graph.addEdge("Meyyappan", "Pawel");
+        graph.addEdge("Carolyn", "Pawel");
+        graph.addEdge("Meyyappan", "Stephanie");
+        graph.addEdge("Carolyn", "Stephanie");
     }
 
     class Vertex {
