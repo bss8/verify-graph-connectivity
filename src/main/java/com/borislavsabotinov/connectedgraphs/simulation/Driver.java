@@ -75,9 +75,41 @@ public class Driver {
     }
 
     public int determineUniConnectivity(int numVertices) {
-        // TODO: develop logic modeled after determineBiConnectivity
-        //  dependent on the UniDirectionalGraph class
-        return 0;
+
+        int numEdges = 0;
+        uniDirectionalGraph.setNumVertices(numVertices);
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        //populate graph with vertices
+        for (int i = 0; i < numVertices; i++) {
+            Faker faker = new Faker();
+            String randomName = faker.name().firstName();
+            uniDirectionalGraph.addVertex(randomName);
+            arrayList.add(i, randomName);
+        }
+        logger.info("array: " + arrayList.toString());
+        logger.info(uniDirectionalGraph.toString());
+        logger.info("arrayList size: " + arrayList.size());
+
+        while (! uniDirectionalGraph.isConnected(arrayList)) {
+            String name1 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
+            String name2 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
+            logger.info(name1 + name2);
+
+            if (!name1.equals(name2)) {
+                boolean isAdded = uniDirectionalGraph.addEdge(name1, name2);
+
+                if(isAdded) {
+                    logger.info("edge added.....");
+                    numEdges++;
+                }
+            }
+        }
+
+        logger.info(uniDirectionalGraph.toString());
+
+
+        return numEdges;
     }
 
     public ArrayList<Integer[]> executePredefinedSimulation() {

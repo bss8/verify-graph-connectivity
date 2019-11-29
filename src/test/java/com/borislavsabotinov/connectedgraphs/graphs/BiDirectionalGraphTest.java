@@ -20,6 +20,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.Set;
 
+import static java.lang.System.out;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BiDirectionalGraphTest {
@@ -28,17 +29,17 @@ class BiDirectionalGraphTest {
     @BeforeEach
     void init() {
         graph = new BiDirectionalGraph<>(String.class);
-        graph.addVertex("Bob");
-        graph.addVertex("Alice");
-        graph.addVertex("Mark");
-        graph.addVertex("Rob");
-        graph.addVertex("Maria");
-        graph.addEdge("Bob", "Alice");
-        graph.addEdge("Bob", "Rob");
-        graph.addEdge("Alice", "Mark");
-        graph.addEdge("Rob", "Mark");
-        graph.addEdge("Alice", "Maria");
-        graph.addEdge("Rob", "Maria");
+        graph.addVertex("Suresh");
+        graph.addVertex("Meyyappan");
+        graph.addVertex("Pawel");
+        graph.addVertex("Carolyn");
+        graph.addVertex("Stephanie");
+        graph.addEdge("Suresh", "Meyyappan");
+        graph.addEdge("Suresh", "Carolyn");
+        graph.addEdge("Meyyappan", "Pawel");
+        graph.addEdge("Carolyn", "Pawel");
+        graph.addEdge("Meyyappan", "Stephanie");
+        graph.addEdge("Carolyn", "Stephanie");
     }
 
     @AfterEach
@@ -55,12 +56,22 @@ class BiDirectionalGraphTest {
     }
 
     @Test
-    void depthFirstTraversal() {
-        Set<String> set = graph.depthFirstTraversal("Bob");
+    void depthFirstSearch() {
+        Set<String> set = graph.depthFirstSearch("Suresh");
         String setStr = set.toString();
-        System.out.println("If Rob is root: [Rob, Maria, Alice, Mark, Bob]");
-        System.out.println("If Bob is root: [Bob, Rob, Maria, Alice, Mark]");
-        System.out.println("actual, given Bob as root: " + setStr);
-        assertEquals("[Bob, Rob, Maria, Alice, Mark]", setStr);
+        out.println("If Carolyn is root: [Carolyn, Stephanie, Meyyappan, Pawel, Suresh]");
+        out.println("If Suresh is root: [Suresh, Carolyn, Stephanie, Meyyappan, Pawel]");
+        out.println("actual, given Suresh as root: " + setStr);
+        assertEquals("[Suresh, Carolyn, Stephanie, Meyyappan, Pawel]", setStr);
+    }
+
+    @Test
+    void breadthFirstSearch() {
+        Set<String> set = graph.breadthFirstSearch("Suresh");
+        String setStr = set.toString();
+        out.println("If Pawel is root: [Pawel, Meyyappan, Carolyn, Suresh, Stephanie]");
+        out.println("If Suresh is root: [Suresh, Meyyappan, Carolyn, Pawel, Stephanie]");
+        out.println("actual, given Suresh as root: " + setStr);
+        assertEquals("[Suresh, Meyyappan, Carolyn, Pawel, Stephanie]", setStr);
     }
 }

@@ -16,18 +16,16 @@
 
 package com.borislavsabotinov.connectedgraphs.graphs;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
- *
+ * Bi-directional, also referred to as undirected, graph.
+ * When an edge from A to B is added, B to A is also added. This ensures
+ * we can move in any direction between two given vertices with no restriction.
  * @param <T>
  */
 public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGraph<T> {
-    Logger logger = Logger.getLogger(BiDirectionalGraph.class.getName());
 
     public BiDirectionalGraph(Class<T> type) {
         super(type);
@@ -59,57 +57,14 @@ public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGr
             eV2.remove(v1);
     }
 
-    Set<T> depthFirstTraversal(T root) {
-        Set<T> visited = new LinkedHashSet<>();
-        Stack<T> stack = new Stack<>();
-        stack.push(root);
-        while (!stack.isEmpty()) {
-            T vertex = stack.pop();
-            if (!visited.contains(vertex)) {
-                visited.add(vertex);
-                for (Vertex v : getAdjacentVertices(vertex)) {
-                    stack.push(v.value);
-                }
-            }
-        }
-        return visited;
-    }
-
-    public boolean isConnected(T key) {
-        boolean isConnected = false;
-        Set<T> tmpSet = depthFirstTraversal(key);
-
-        if (getNumVertices() == tmpSet.size()) {
-            isConnected = true;
-        }
-        return isConnected;
-    }
-
-    public Class<T> getMyType() {
-        return this.type;
-    }
-
     public static void main(String...args) {
         BiDirectionalGraph<String> graph = new BiDirectionalGraph<>(String.class);
-        graph.createGraph(graph);
+        graph.initGraph(graph);
         System.out.println(graph.toString());
-        System.out.println(graph.getAdjacentVertices("Maria").toString());
-        boolean isConnected = graph.isConnected("Bob");
+        System.out.println(graph.getAdjacentVertices("Stephanie").toString());
+        boolean isConnected = graph.isConnected("Suresh");
         System.out.println("Is connected? " + isConnected);
     }
 
-    void createGraph(BasicGraph<String> graph) {
-        graph.addVertex("Bob");
-        graph.addVertex("Alice");
-        graph.addVertex("Mark");
-        graph.addVertex("Rob");
-        graph.addVertex("Maria");
-        graph.setNumVertices(5);
-        graph.addEdge("Bob", "Alice");
-        graph.addEdge("Bob", "Rob");
-        graph.addEdge("Alice", "Mark");
-        graph.addEdge("Rob", "Mark");
-        graph.addEdge("Alice", "Maria");
-        graph.addEdge("Rob", "Maria");
-    }
+
 } // end class BiDirectionalGraph

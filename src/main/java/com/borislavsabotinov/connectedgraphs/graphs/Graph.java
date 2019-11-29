@@ -17,6 +17,7 @@
 package com.borislavsabotinov.connectedgraphs.graphs;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface Graph defines behavior that an implementing class must override.

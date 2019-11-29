@@ -16,8 +16,14 @@
 
 package com.borislavsabotinov.connectedgraphs.graphs;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 /**
- * TODO: develop class functionality - include interface and helper methods
+ * Uni-directional, also referred to as a directed, graph.
+ * When an edge is added from A to B, <strong>NO</strong> edge is added from B to A.
+ * This means we cannot reach A if we start from B - movement is in one direction only.
  * @param <T>
  */
 public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicGraph<T>  {
@@ -27,16 +33,60 @@ public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicG
     }
 
     @Override
-    public boolean addEdge(T value1, T value2) {
-        return false;
+    public boolean addEdge(T fromValue1, T toValue2) {
+        boolean addedEdge = false;
+        Vertex v1 = new Vertex(fromValue1);
+        Vertex v2 = new Vertex(toValue2);
+        if (!adjacencyMap.get(v1).contains(v2)) {
+            adjacencyMap.get(v1).add(v2);
+            addedEdge = true;
+        }
+        return addedEdge;
     }
 
     @Override
-    public void removeEdge(T value1, T value2) {
-
+    public void removeEdge(T fromValue1, T toValue2) {
+        Vertex v1 = new Vertex(fromValue1);
+        Vertex v2 = new Vertex(toValue2);
+        List<Vertex> eV1 = adjacencyMap.get(v1);
+        if (eV1 != null)
+            eV1.remove(v2);
     }
+
 
     public Class<T> getMyType() {
         return this.type;
+    }
+
+
+    public boolean isConnected(ArrayList<T> listOfVertices) {
+        boolean isConnected = false;
+
+        for (T listOfVertex : listOfVertices) {
+            Set<T> tmpSet = depthFirstSearch(listOfVertex);
+            if (getNumVertices() == tmpSet.size()) {
+                isConnected = true;
+                break;
+            }
+        }
+
+        return isConnected;
+    }
+
+    public static void main(String...args) {
+        UniDirectionalGraph<String> graph = new UniDirectionalGraph<>(String.class);
+        graph.initGraph(graph);
+        System.out.println(graph.toString());
+        System.out.println(graph.getAdjacentVertices("Stephanie").toString());
+        ArrayList<String> listOfKeys = new ArrayList<>();
+        listOfKeys.add("Suresh");
+        listOfKeys.add("Stephanie");
+        listOfKeys.add("Carolyn");
+        listOfKeys.add("Pawel");
+        listOfKeys.add("Meyyappan");
+        boolean isConnected = graph.isConnected(listOfKeys);
+        System.out.println("Is connected? " + isConnected);
+        isConnected = graph.isConnected("Pawel");
+        System.out.println("Is connected? " + isConnected);
     }
 } // end class UniDirectionalGraph
