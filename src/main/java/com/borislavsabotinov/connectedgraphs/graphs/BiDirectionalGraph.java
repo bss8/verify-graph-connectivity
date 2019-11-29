@@ -57,55 +57,6 @@ public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGr
             eV2.remove(v1);
     }
 
-    @Override
-    public Set<T> depthFirstSearch(T root) {
-        Set<T> visited = new LinkedHashSet<>();
-        Stack<T> stack = new Stack<>();
-        stack.push(root);
-        while (!stack.isEmpty()) {
-            T vertex = stack.pop();
-            if (!visited.contains(vertex)) {
-                visited.add(vertex);
-                for (Vertex v : getAdjacentVertices(vertex)) {
-                    stack.push(v.value);
-                }
-            }
-        }
-        return visited;
-    }
-
-    @Override
-    public Set<T> breadthFirstSearch(T root) {
-        Set<T> visited = new LinkedHashSet<>();
-        Queue<T> queue = new LinkedList<>();
-        queue.add(root);
-        visited.add(root);
-        while (!queue.isEmpty()) {
-            T vertex = queue.poll();
-            for (Vertex v : getAdjacentVertices(vertex)) {
-                if (!visited.contains(v.value)) {
-                    visited.add(v.value);
-                    queue.add(v.value);
-                }
-            }
-        }
-        return visited;
-    }
-
-    public boolean isConnected(T key) {
-        boolean isConnected = false;
-        Set<T> tmpSet = depthFirstSearch(key);
-
-        if (getNumVertices() == tmpSet.size()) {
-            isConnected = true;
-        }
-        return isConnected;
-    }
-
-    public Class<T> getMyType() {
-        return this.type;
-    }
-
     public static void main(String...args) {
         BiDirectionalGraph<String> graph = new BiDirectionalGraph<>(String.class);
         graph.initGraph(graph);
