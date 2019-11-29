@@ -75,7 +75,32 @@ public class Driver {
     }
 
     public int determineUniConnectivity(int numVertices) {
+        // TODO: develop logic modeled after determineBiConnectivity
+        //  dependent on the UniDirectionalGraph class
         return 0;
+    }
+
+    public ArrayList<Integer[]> executePredefinedSimulation() {
+        int numVertices = 500;  // equivalent to # of runs
+        biDirectionalGraph = new BiDirectionalGraph<>(String.class);
+        uniDirectionalGraph = new UniDirectionalGraph<>(String.class);
+        Integer[] uniDirectionalResults = new Integer[numVertices];
+        Integer[] biDirectionalResults = new Integer[numVertices];
+
+
+        for (int i = 1; i < numVertices; i ++) {
+            int numEdgesToConnectBiDirectionalGraph = determineBiConnectivity(i+1);
+            int numEdgesToConnectUniDirectionalGraph = determineUniConnectivity(i+1);
+
+            biDirectionalResults[i] = numEdgesToConnectBiDirectionalGraph;
+            uniDirectionalResults[i] = numEdgesToConnectUniDirectionalGraph;
+        }
+
+        ArrayList<Integer[]> simulationResults = new ArrayList<>();
+        simulationResults.add(biDirectionalResults);
+        simulationResults.add(uniDirectionalResults);
+
+        return simulationResults;
     }
 
     private static int getRandomNumberInRange(int min, int max) {

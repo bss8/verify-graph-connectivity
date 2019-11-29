@@ -17,7 +17,7 @@
 package com.borislavsabotinov.connectedgraphs.graphs;
 
 /**
- *
+ * TODO: develop class functionality - include interface and helper methods
  * @param <T>
  */
 public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicGraph<T>  {
