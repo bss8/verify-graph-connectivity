@@ -35,7 +35,8 @@ $(document).ready(function () {
             "numVertices": numVertices,
             "isBiDirectional": isBiDirectional
         }) .done(function(data) {
-            console.log( "Invoking /api/passGraphParams for a single graph." + data );
+            console.log( "Invoking /api/passGraphParams for a single graph. # edges to connect: " + data );
+            $('#singleGraphResult').val(data.toString());
         });
 
     });

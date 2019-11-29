@@ -41,19 +41,30 @@ public class BaseController {
     }
 
     @GetMapping("/api/passGraphParams")
-    void passGraphParams(@RequestParam String numVertices, @RequestParam String isBiDirectional) {
+    int passGraphParams(@RequestParam String numVertices, @RequestParam String isBiDirectional) {
         Logger logger = Logger.getLogger(BaseController.class.getName());
         logger.info("numVertices: " + numVertices);
         logger.info("isBiDirectional: " + isBiDirectional);
 
-        Graph<String> graph = GraphTypeFactory.generateGraphClassInstance(Boolean.parseBoolean(isBiDirectional));
-        if (graph instanceof UniDirectionalGraph) {
-            logger.info("Graph is instance of UniDirectional class.");
-            logger.info("Data type: " + ((UniDirectionalGraph<String>) graph).getMyType().toString());
-            Driver driver = new Driver(graph);
-        } else if (graph instanceof BiDirectionalGraph) {
-            logger.info("Graph is instance of BiDirectional class.");
-            logger.info("Data type: " + ((BiDirectionalGraph<String>) graph).getMyType().toString());
+        int numEdgesToConnect = determineConnectivity(Boolean.parseBoolean(isBiDirectional), Integer.parseInt(numVertices));
+        logger.info("# of (randomly generated) edges it takes to connect graph: " + numEdgesToConnect);
+        return numEdgesToConnect;
+    }
+
+    private int determineConnectivity(boolean isBiDirectional, int numVertices) {
+        Driver driver;
+        int numEdgesToConnect;
+
+        if (isBiDirectional) {
+            BiDirectionalGraph<String> biDirectionalGraph = new BiDirectionalGraph<>(String.class);
+            driver = new Driver(biDirectionalGraph);
+            numEdgesToConnect = driver.determineBiConnectivity(numVertices);
+        } else {
+            UniDirectionalGraph<String> uniDirectionalGraph = new UniDirectionalGraph<>(String.class);
+            driver = new Driver(uniDirectionalGraph);
+            numEdgesToConnect = driver.determineUniConnectivity(numVertices);
         }
+
+        return numEdgesToConnect;
     }
 }

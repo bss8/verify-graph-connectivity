@@ -17,22 +17,74 @@
 package com.borislavsabotinov.connectedgraphs.simulation;
 
 import com.borislavsabotinov.connectedgraphs.graphs.BiDirectionalGraph;
-import com.borislavsabotinov.connectedgraphs.graphs.Graph;
 import com.borislavsabotinov.connectedgraphs.graphs.UniDirectionalGraph;
+import com.github.javafaker.Faker;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.logging.Logger;
+
+import static java.lang.System.currentTimeMillis;
 
 public class Driver {
-    Graph<String> graph;
+    Logger logger = Logger.getLogger(Driver.class.getName());
+    BiDirectionalGraph<String> biDirectionalGraph;
+    UniDirectionalGraph<String> uniDirectionalGraph;
 
-    public Driver(Graph<String> graph) {
-        this.graph = graph;
+    public Driver(BiDirectionalGraph<String> biDirectionalGraph) {
+        this.biDirectionalGraph = biDirectionalGraph;
     }
 
-    public void determineConnectivity() {
-
+    public Driver(UniDirectionalGraph<String> uniDirectionalGraph) {
+        this.uniDirectionalGraph = uniDirectionalGraph;
     }
 
-    //given numVertices, generate random vertex values
+    public int determineBiConnectivity(int numVertices) {
+        int numEdges = 0;
+        biDirectionalGraph.setNumVertices(numVertices);
+        ArrayList<String> arrayList = new ArrayList<>();
 
-    //add edge at random
+        //populate graph with vertices
+        for (int i = 0; i < numVertices; i++) {
+            Faker faker = new Faker();
+            String randomName = faker.name().firstName();
+            biDirectionalGraph.addVertex(randomName);
+            arrayList.add(i, randomName);
+        }
+        logger.info("array: " + arrayList.toString());
+        logger.info(biDirectionalGraph.toString());
+        logger.info("arrayList size: " + arrayList.size());
 
-}
+        while (! biDirectionalGraph.isConnected(arrayList.get(0))) {
+            String name1 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
+            String name2 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
+            logger.info(name1 + name2);
+
+            if (!name1.equals(name2)) {
+                boolean isAdded = biDirectionalGraph.addEdge(name1, name2);
+                if(isAdded) {
+                    numEdges++;
+                }
+            }
+        }
+
+        logger.info(biDirectionalGraph.toString());
+
+        return numEdges;
+    }
+
+    public int determineUniConnectivity(int numVertices) {
+        return 0;
+    }
+
+    private static int getRandomNumberInRange(int min, int max) {
+
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
+    }
+} // end class Driver

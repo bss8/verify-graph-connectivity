@@ -22,13 +22,13 @@ package com.borislavsabotinov.connectedgraphs.graphs;
  */
 public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicGraph<T>  {
 
-    UniDirectionalGraph(Class<T> type) {
+    public UniDirectionalGraph(Class<T> type) {
         super(type);
     }
 
     @Override
-    public void addEdge(T value1, T value2) {
-
+    public boolean addEdge(T value1, T value2) {
+        return false;
     }
 
     @Override

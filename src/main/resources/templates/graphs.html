@@ -41,14 +41,16 @@
                 <div class="form-group">
                     <label for="numVertices"></label>
                     <input type="number" min="2" class="form-control" id="numVertices"
-                           aria-describedby="numVertices" placeholder="# Vertices (N)" oninput="validity.valid||(value='');">
+                           aria-describedby="numVertices" placeholder="# Vertices (N)" oninput="validity.valid||(value='');" />
                     <small id="numVerticesHelp" class="form-text text-muted">Numeric values only, N >= 2. Uni-directional (Default)</small>
                 </div>
                 <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="biDirectional">
+                    <input type="checkbox" class="form-check-input" id="biDirectional" />
                     <label class="form-check-label" for="biDirectional">Bi-directional</label>
                 </div>
                 <button class="btn btn-primary" id="connectVerticesBtn">Connect Vertices</button>
+                <label for="singleGraphResult">Result: </label>
+                <input readonly type="text" id="singleGraphResult" placeholder="Result (# edges to connect)" />
             </div>
             <div class="col-sm-1"></div>
             <div class="col-sm containerShadow">

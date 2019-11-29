@@ -58,7 +58,7 @@ public abstract class BasicGraph<T extends Comparable<? super T>> implements Gra
     }
 
     @Override
-    public abstract void addEdge(T value1, T value2);
+    public abstract boolean addEdge(T value1, T value2);
 
     @Override
     public abstract void removeEdge(T value1, T value2);
@@ -73,14 +73,17 @@ public abstract class BasicGraph<T extends Comparable<? super T>> implements Gra
         return this.adjacencyMap.toString();
     }
 
+    @Override
     public Class<T> getMyType() {
         return this.type;
     }
 
+    @Override
     public int getNumVertices() {
         return numVertices;
     }
 
+    @Override
     public void setNumVertices(int numVertices) {
         this.numVertices = numVertices;
     }

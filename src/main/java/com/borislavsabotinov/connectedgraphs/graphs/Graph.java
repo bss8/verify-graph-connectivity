@@ -25,7 +25,10 @@ import java.util.List;
 public interface Graph<T extends Comparable<? super T>> {
     void addVertex(T value);
     void removeVertex(T value);
-    void addEdge(T value1, T value2);
+    boolean addEdge(T value1, T value2);
     void removeEdge(T value1, T value2);
     List<BasicGraph<T>.Vertex> getAdjacentVertices(T value);
+    Class<T> getMyType();
+    int getNumVertices();
+    void setNumVertices(int numVertices);
 }

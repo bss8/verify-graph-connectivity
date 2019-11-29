@@ -20,23 +20,31 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.logging.Logger;
 
 /**
  *
  * @param <T>
  */
 public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGraph<T> {
+    Logger logger = Logger.getLogger(BiDirectionalGraph.class.getName());
 
-    BiDirectionalGraph(Class<T> type) {
+    public BiDirectionalGraph(Class<T> type) {
         super(type);
     }
 
     @Override
-    public void addEdge(T value1, T value2) {
+    public boolean addEdge(T value1, T value2) {
+        boolean addedEdge = false;
         Vertex v1 = new Vertex(value1);
         Vertex v2 = new Vertex(value2);
-        adjacencyMap.get(v1).add(v2);
-        adjacencyMap.get(v2).add(v1);
+        if (!adjacencyMap.get(v1).contains(v2) &&
+                !adjacencyMap.get(v2).contains(v1)) {
+            adjacencyMap.get(v1).add(v2);
+            adjacencyMap.get(v2).add(v1);
+            addedEdge = true;
+        }
+        return addedEdge;
     }
 
     @Override
@@ -67,6 +75,16 @@ public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGr
         return visited;
     }
 
+    public boolean isConnected(T key) {
+        boolean isConnected = false;
+        Set<T> tmpSet = depthFirstTraversal(key);
+
+        if (getNumVertices() == tmpSet.size()) {
+            isConnected = true;
+        }
+        return isConnected;
+    }
+
     public Class<T> getMyType() {
         return this.type;
     }
@@ -76,6 +94,8 @@ public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGr
         graph.createGraph(graph);
         System.out.println(graph.toString());
         System.out.println(graph.getAdjacentVertices("Maria").toString());
+        boolean isConnected = graph.isConnected("Bob");
+        System.out.println("Is connected? " + isConnected);
     }
 
     void createGraph(BasicGraph<String> graph) {
@@ -84,6 +104,7 @@ public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGr
         graph.addVertex("Mark");
         graph.addVertex("Rob");
         graph.addVertex("Maria");
+        graph.setNumVertices(5);
         graph.addEdge("Bob", "Alice");
         graph.addEdge("Bob", "Rob");
         graph.addEdge("Alice", "Mark");
