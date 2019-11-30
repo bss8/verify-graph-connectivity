@@ -21,10 +21,7 @@ import com.borislavsabotinov.connectedgraphs.graphs.UniDirectionalGraph;
 import com.github.javafaker.Faker;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Random;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class Driver {
@@ -60,18 +57,9 @@ public class Driver {
         logger.info("BiDirectional Graph obj: " + biDirectionalGraph.toString());
         logger.info("arrayList size: " + arrayList.size());
 
-        while ((arrayList.size() > 0) &&
-                (!biDirectionalGraph.isConnected(arrayList.get(0))) ) {
-            String name1 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
-            String name2 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
-            logger.info(name1 + name2);
-            logger.info("BiDirectional Graph obj: " + biDirectionalGraph.toString());
-            if (!name1.equals(name2)) {
-                boolean isAdded = biDirectionalGraph.addEdge(name1, name2);
-                if(isAdded) {
-                    logger.info("BI-DIRECTIONAL edge added.....");
-                    numEdges++;
-                }
+        for (int i = 0; i < arrayList.size(); i++) {
+            for (int j = 0; j < arrayList.size(); j++) {
+
             }
         }
 
@@ -98,24 +86,17 @@ public class Driver {
         logger.info(uniDirectionalGraph.toString());
         logger.info("arrayList size: " + arrayList.size());
 
+        ArrayList<String[]> uniquePairs = findUniquePairs(arrayList);
+        logger.info("uniquePairs: " + Arrays.deepToString(uniquePairs.toArray()));
+
         while ((arrayList.size() > 0) &&
                 (!uniDirectionalGraph.isConnected(arrayList)) ) {
-            String name1 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
-            String name2 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
-            logger.info("Single Direction random edge generated as: " + name1 + " to " + name2);
-
-            if (!name1.equals(name2)) {
-                boolean isAdded = uniDirectionalGraph.addEdge(name1, name2);
-
-                if(isAdded) {
-                    logger.info("DIRECTIONAL edge added.....");
-                    numEdges++;
-                }
-            }
+            int randIntInRange = getRandomNumberInRange(0, arrayList.size() - 1);
+            String[] randomUniquePair = uniquePairs.get(randIntInRange);
+            uniquePairs.remove(randomUniquePair);
+            boolean isAdded = uniDirectionalGraph.addEdge(randomUniquePair[0], randomUniquePair[1]);
+            numEdges++;
         }
-
-        logger.info(uniDirectionalGraph.toString());
-
 
         return numEdges;
     }
@@ -143,7 +124,7 @@ public class Driver {
         return gson.toJson(simulationResults);
     }
 
-    private static int getRandomNumberInRange(int min, int max) {
+    public int getRandomNumberInRange(int min, int max) {
 
         if (min >= max) {
             throw new IllegalArgumentException("max must be greater than min");
@@ -151,5 +132,16 @@ public class Driver {
 
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
+    }
+
+
+    public ArrayList<String[]> findUniquePairs(ArrayList<String> a) {
+        final ArrayList<String[]> pairs = new ArrayList<>();
+        for (int i = 0; i < a.size(); ++i) {
+            for (int j = i + 1; j < a.size(); ++j) {
+                pairs.add(new String[]{a.get(i), a.get(j)});
+            }
+        }
+        return pairs;
     }
 } // end class Driver
