@@ -60,6 +60,10 @@ public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicG
 
 
     public boolean isConnected(ArrayList<T> listOfVertices) {
+        if (listOfVertices.size() <= 1) {
+            return true;
+        }
+
         boolean isConnected = false;
 
         for (T listOfVertex : listOfVertices) {

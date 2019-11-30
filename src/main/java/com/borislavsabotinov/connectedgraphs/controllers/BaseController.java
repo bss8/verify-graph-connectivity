@@ -41,10 +41,9 @@ public class BaseController {
     @GetMapping("/api/executePredefinedSimulation")
     String executePredefinedSimulation() {
         Driver driver = new Driver();
-        ArrayList<Integer[]> simResults = driver.executePredefinedSimulation();
+        String simResults = driver.executePredefinedSimulation();
         logger.info("simResults: " + simResults.toString());
-        String gson = new Gson().toJson(simResults);
-        return gson;
+        return simResults;
     }
 
     @GetMapping("/api/passGraphParams")

@@ -19,9 +19,12 @@ package com.borislavsabotinov.connectedgraphs.simulation;
 import com.borislavsabotinov.connectedgraphs.graphs.BiDirectionalGraph;
 import com.borislavsabotinov.connectedgraphs.graphs.UniDirectionalGraph;
 import com.github.javafaker.Faker;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 public class Driver {
@@ -52,18 +55,21 @@ public class Driver {
             biDirectionalGraph.addVertex(randomName);
             arrayList.add(i, randomName);
         }
+
         logger.info("array: " + arrayList.toString());
-        logger.info(biDirectionalGraph.toString());
+        logger.info("BiDirectional Graph obj: " + biDirectionalGraph.toString());
         logger.info("arrayList size: " + arrayList.size());
 
-        while (! biDirectionalGraph.isConnected(arrayList.get(0))) {
+        while ((arrayList.size() > 0) &&
+                (!biDirectionalGraph.isConnected(arrayList.get(0))) ) {
             String name1 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
             String name2 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
             logger.info(name1 + name2);
-
+            logger.info("BiDirectional Graph obj: " + biDirectionalGraph.toString());
             if (!name1.equals(name2)) {
                 boolean isAdded = biDirectionalGraph.addEdge(name1, name2);
                 if(isAdded) {
+                    logger.info("BI-DIRECTIONAL edge added.....");
                     numEdges++;
                 }
             }
@@ -87,20 +93,22 @@ public class Driver {
             uniDirectionalGraph.addVertex(randomName);
             arrayList.add(i, randomName);
         }
+
         logger.info("array: " + arrayList.toString());
         logger.info(uniDirectionalGraph.toString());
         logger.info("arrayList size: " + arrayList.size());
 
-        while (! uniDirectionalGraph.isConnected(arrayList)) {
+        while ((arrayList.size() > 0) &&
+                (!uniDirectionalGraph.isConnected(arrayList)) ) {
             String name1 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
             String name2 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
-            logger.info(name1 + name2);
+            logger.info("Single Direction random edge generated as: " + name1 + " to " + name2);
 
             if (!name1.equals(name2)) {
                 boolean isAdded = uniDirectionalGraph.addEdge(name1, name2);
 
                 if(isAdded) {
-                    logger.info("edge added.....");
+                    logger.info("DIRECTIONAL edge added.....");
                     numEdges++;
                 }
             }
@@ -112,27 +120,27 @@ public class Driver {
         return numEdges;
     }
 
-    public ArrayList<Integer[]> executePredefinedSimulation() {
-        int numVertices = 10;  // equivalent to # of runs
+    public String executePredefinedSimulation() {
+        int numRuns = 20;
         biDirectionalGraph = new BiDirectionalGraph<>(String.class);
         uniDirectionalGraph = new UniDirectionalGraph<>(String.class);
-        Integer[] uniDirectionalResults = new Integer[numVertices];
-        Integer[] biDirectionalResults = new Integer[numVertices];
+        ArrayList<Integer> biDirectionalResults = new ArrayList<>();
+        ArrayList<Integer> uniDirectionalResults = new ArrayList<>();
 
+        for (int i = 0; i < numRuns; i ++) {
+            int numEdgesToConnectBiDirectionalGraph = determineBiConnectivity(i);
+            int numEdgesToConnectUniDirectionalGraph = determineUniConnectivity(i);
 
-        for (int i = 0; i < numVertices; i ++) {
-            int numEdgesToConnectBiDirectionalGraph = determineBiConnectivity(i+2);
-            int numEdgesToConnectUniDirectionalGraph = determineUniConnectivity(i+2);
-
-            biDirectionalResults[i] = numEdgesToConnectBiDirectionalGraph;
-            uniDirectionalResults[i] = numEdgesToConnectUniDirectionalGraph;
+            biDirectionalResults.add(numEdgesToConnectBiDirectionalGraph);
+            uniDirectionalResults.add(numEdgesToConnectUniDirectionalGraph);
         }
 
-        ArrayList<Integer[]> simulationResults = new ArrayList<>();
-        simulationResults.add(biDirectionalResults);
-        simulationResults.add(uniDirectionalResults);
+        Map<String, ArrayList<Integer>> simulationResults = new TreeMap<>();
+        simulationResults.put("biDirectionalResults", biDirectionalResults);
+        simulationResults.put("uniDirectionalResults", uniDirectionalResults);
 
-        return simulationResults;
+        Gson gson = new Gson();
+        return gson.toJson(simulationResults);
     }
 
     private static int getRandomNumberInRange(int min, int max) {

@@ -102,6 +102,10 @@ public abstract class BasicGraph<T extends Comparable<? super T>> implements Gra
 
     @Override
     public boolean isConnected(T key) {
+        if (getNumVertices() <= 1) {
+            return true;
+        }
+
         boolean isConnected = false;
         Set<T> tmpSet = depthFirstSearch(key);
 
