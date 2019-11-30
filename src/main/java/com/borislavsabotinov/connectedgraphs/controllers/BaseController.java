@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 
 import com.borislavsabotinov.connectedgraphs.graphs.*;
 import com.borislavsabotinov.connectedgraphs.simulation.Driver;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,11 +39,12 @@ public class BaseController {
     }
 
     @GetMapping("/api/executePredefinedSimulation")
-    ArrayList<Integer[]> executePredefinedSimulation() {
+    String executePredefinedSimulation() {
         Driver driver = new Driver();
         ArrayList<Integer[]> simResults = driver.executePredefinedSimulation();
         logger.info("simResults: " + simResults.toString());
-        return simResults;
+        String gson = new Gson().toJson(simResults);
+        return gson;
     }
 
     @GetMapping("/api/passGraphParams")

@@ -21,11 +21,8 @@ import com.borislavsabotinov.connectedgraphs.graphs.UniDirectionalGraph;
 import com.github.javafaker.Faker;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Logger;
-
-import static java.lang.System.currentTimeMillis;
 
 public class Driver {
     Logger logger = Logger.getLogger(Driver.class.getName());
@@ -123,9 +120,9 @@ public class Driver {
         Integer[] biDirectionalResults = new Integer[numVertices];
 
 
-        for (int i = 1; i < numVertices; i ++) {
-            int numEdgesToConnectBiDirectionalGraph = determineBiConnectivity(i+1);
-            int numEdgesToConnectUniDirectionalGraph = determineUniConnectivity(i+1);
+        for (int i = 0; i < numVertices; i ++) {
+            int numEdgesToConnectBiDirectionalGraph = determineBiConnectivity(i+2);
+            int numEdgesToConnectUniDirectionalGraph = determineUniConnectivity(i+2);
 
             biDirectionalResults[i] = numEdgesToConnectBiDirectionalGraph;
             uniDirectionalResults[i] = numEdgesToConnectUniDirectionalGraph;

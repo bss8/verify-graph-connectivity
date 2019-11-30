@@ -34,7 +34,7 @@ Open a browser and navigate to:
 To view the available API endpoints and details about them:
 1. Ensure the project is running and you can navigate to `localhost:8080`
 2. Navigate to: 
-http://localhost:8080/api/swagger-ui.html
+http://localhost:8080/swagger-ui.html
 ![Swagger UI screenshot](https://i.imgur.com/yEwxkYc.png)
 
 ## Deploy the back-end
