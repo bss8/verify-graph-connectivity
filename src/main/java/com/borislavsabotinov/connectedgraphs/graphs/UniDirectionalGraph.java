@@ -25,6 +25,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Uni-directional, also referred to as a directed, graph.
  * When an edge is added from A to B, <strong>NO</strong> edge is added from B to A.
  * This means we cannot reach A if we start from B - movement is in one direction only.
+ * N*(N-1) is number of edges in directed graph
  * @param <T>
  */
 public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicGraph<T>  {
@@ -68,7 +69,7 @@ public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicG
 
         for (T listOfVertex : listOfVertices) {
             Set<T> tmpSet = depthFirstSearch(listOfVertex);
-            if (getNumVertices() == tmpSet.size()) {
+            if (getNumVertices() <= tmpSet.size()) {
                 isConnected = true;
                 break;
             }
@@ -78,10 +79,8 @@ public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicG
     }
 
     public int determineNumEdges(int numVertices) {
-        if (numVertices == 0) {
+        if (numVertices <= 1) {
             return 0;
-        } else if (numVertices == 1) {
-            return 1;
         }
 
         int numEdgesToConnect = 0;
@@ -90,61 +89,88 @@ public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicG
         ArrayList<T> listOfValues = new ArrayList<>();
         ArrayList<String[]> listOfUniquePairs = new ArrayList<>();
 
-        for (int i = 0; i < numVertices; i++) {
-            Faker faker = new Faker();
-            String name = faker.name().firstName();
-            addVertex((T) name);
-            listOfValues.add((T) name);
-        }
+        populateGraph(numVertices, listOfValues);
 
         listOfUniquePairs = findUniquePairs((ArrayList<String>) listOfValues);
         ArrayList<String[]> copyListOfPairs = new ArrayList<>(listOfUniquePairs);
 
         // Try adding edges one way
-        while (listOfUniquePairs.size() > 0) {
+        while (!isConnected(listOfValues)) {
+            System.out.println("UNI LOOPING! uniqueList size: " + listOfUniquePairs.size() );
+            if (listOfUniquePairs.size() == 0) {
+                return numVertices * (numVertices -1);
+            }
             // nextInt is normally exclusive of the top value, can add 1 to make it inclusive
             int randomNum = ThreadLocalRandom.current().nextInt(0, listOfUniquePairs.size());
             T[] edgePair = (T[]) listOfUniquePairs.get(randomNum);
 
             boolean isAddedTo = addEdge(edgePair[0], edgePair[1]);
             boolean isAddedFrom = addEdge(edgePair[1], edgePair[0]);
+
             if (isAddedTo) {
+                System.out.println("Adding TO!");
                 numEdgesToConnect++;
-                listOfUniquePairs.remove(edgePair);
+
                 if (isConnected(listOfValues)) {
-                    return numEdgesToConnect;
-                }
-            } else if (isAddedFrom) {
-                numEdgesToConnect++;
-                listOfUniquePairs.remove(new String[]{(String) edgePair[1], (String) edgePair[0]});
-                if (isConnected(listOfValues)) {
+                    System.out.println("CONNECTED!");
                     return numEdgesToConnect;
                 }
             }
+
+            if (listOfUniquePairs.remove(edgePair) ) {
+                System.out.println("removed unique pair from list 1");
+            } else {
+                System.out.println("DID NOT remove unique pair from list 1");
+            }
+
+            if (isAddedFrom) {
+                System.out.println("Adding FROM!");
+                numEdgesToConnect++;
+
+                if (isConnected(listOfValues)) {
+                    System.out.println("CONNECTED!");
+                    return numEdgesToConnect;
+                }
+            }
+            T[] reversedPair = (T[]) new String[]{(String) edgePair[1], (String) edgePair[0]};
+            if (listOfUniquePairs.remove(reversedPair)) {
+                System.out.println("removed unique pair from list 2");
+            } else {
+                System.out.println("DID NOT remove unique pair from list 2");
+            }
+
+//            if (!isAddedTo && !isAddedFrom) {
+//                listOfUniquePairs.remove(edgePair);
+//                listOfUniquePairs.remove(new String[]{(String) edgePair[1], (String) edgePair[0]});
+//                if (isConnected(listOfValues)) {
+//                    System.out.println("CONNECTED!");
+//                    return numEdgesToConnect;
+//                }
+//            }
         }
 
-        System.out.println("If we see this, something went wrong! There is no graph connection!");
+        System.out.println("UNIDIRECTIONAL: If we see this, something went wrong! There is no graph connection!");
         return numEdgesToConnect;
     }
 
     public static void main(String...args) {
         UniDirectionalGraph<String> graph = new UniDirectionalGraph<>(String.class);
-        graph.initGraph(graph);
-        System.out.println(graph.toString());
-        System.out.println(graph.getAdjacentVertices("Stephanie").toString());
-        ArrayList<String> listOfKeys = new ArrayList<>();
-        listOfKeys.add("Suresh");
-        listOfKeys.add("Stephanie");
-        listOfKeys.add("Carolyn");
-        listOfKeys.add("Pawel");
-        listOfKeys.add("Meyyappan");
-        boolean isConnected = graph.isConnected(listOfKeys);
-        System.out.println("Is connected - check all vertices as starting point? " + isConnected);
-        isConnected = graph.isConnected("Pawel");
-        System.out.println("Is connected starting at Pawel? " + isConnected);
-        ArrayList<String[]> stringList = graph.findUniquePairs(listOfKeys);
-        System.out.println("Unique pairs: " + Arrays.deepToString(stringList.toArray()));
-        int numEdges = graph.determineNumEdges(50);
+//        graph.initGraph(graph);
+//        System.out.println(graph.toString());
+//        System.out.println(graph.getAdjacentVertices("Stephanie").toString());
+//        ArrayList<String> listOfKeys = new ArrayList<>();
+//        listOfKeys.add("Suresh");
+//        listOfKeys.add("Stephanie");
+//        listOfKeys.add("Carolyn");
+//        listOfKeys.add("Pawel");
+//        listOfKeys.add("Meyyappan");
+//        boolean isConnected = graph.isConnected(listOfKeys);
+//        System.out.println("Is connected - check all vertices as starting point? " + isConnected);
+//        isConnected = graph.isConnected("Pawel");
+//        System.out.println("Is connected starting at Pawel? " + isConnected);
+//        ArrayList<String[]> stringList = graph.findUniquePairs(listOfKeys);
+//        System.out.println("Unique pairs: " + Arrays.deepToString(stringList.toArray()));
+        int numEdges = graph.determineNumEdges(70);
         System.out.println("# edges to connect? " + numEdges);
     }
 } // end class UniDirectionalGraph

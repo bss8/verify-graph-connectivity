@@ -37,12 +37,14 @@ $(document).ready(function () {
         console.log("N: " + numVertices);
         console.log("isBiDirectional: " + isBiDirectional);
 
+        body.addClass("loading");
         $.get(origin + "/api/passGraphParams", {
             "numVertices": numVertices,
             "isBiDirectional": isBiDirectional
         }) .done(function(data) {
             console.log( "Invoking /api/passGraphParams for a single graph. # edges to connect: " + data );
             $('#singleGraphResult').val(data.toString());
+            body.removeClass("loading");
         });
 
     });
@@ -65,14 +67,14 @@ $(document).ready(function () {
 
     function init() {
         // set these values for your data
-        sections = 4;
-        let maxVal = 100;
+        sections = 9;
+        let maxVal = 400;
         let minVal = 0;
         const stepSize = 10;
-        const columnSize = 25;
-        const rowSize = 25;
+        const columnSize = 50;
+        const rowSize = 50;
         const margin = 10;
-        const xAxis = [" ", "5", "10", "15", "20"];
+        const xAxis = [" ", "5", "10", "15", "20", "25", "30", "35", "40", "45"];
 
         let canvas = document.getElementById("canvas");
         context = canvas.getContext("2d");

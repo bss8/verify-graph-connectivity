@@ -16,6 +16,8 @@
 
 package com.borislavsabotinov.connectedgraphs.graphs;
 
+import com.github.javafaker.Faker;
+
 import java.util.*;
 
 /**
@@ -136,14 +138,30 @@ public abstract class BasicGraph<T extends Comparable<? super T>> implements Gra
         this.numVertices = numVertices;
     }
 
+    /**
+     * if j = i+1 then we generate unique pairs (i.e., ab and ba are considered the same)
+     * if j = 0 then we generate all paris (i.e., ab and ba are considered different)
+     * @param a
+     * @return
+     */
     public ArrayList<String[]> findUniquePairs(ArrayList<String> a) {
         final ArrayList<String[]> pairs = new ArrayList<>();
         for (int i = 0; i < a.size(); ++i) {
-            for (int j = i + 1; j < a.size(); ++j) {
+            for (int j = 0; j < a.size(); ++j) {
+                if (a.get(i).equals(a.get(j))) continue;
                 pairs.add(new String[]{a.get(i), a.get(j)});
             }
         }
         return pairs;
+    }
+
+    void populateGraph(int numVertices, ArrayList<T> listOfValues) {
+        for (int i = 0; i < numVertices; i++) {
+            Faker faker = new Faker();
+            String name = faker.name().firstName();
+            addVertex((T) name);
+            listOfValues.add((T) name);
+        }
     }
 
     /**

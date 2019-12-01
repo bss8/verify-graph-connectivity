@@ -62,6 +62,9 @@
             </div>
             <div class="col-sm-1"></div>
             <div class="col-sm containerShadow">
+                <label for="numRuns"></label>
+                <input type="number" min="0" class="form-control" id="numRuns"
+                       aria-describedby="numRuns" placeholder="# of runs" oninput="validity.valid||(value='');" />
                 <button class="btn btn-secondary" id="predefinedSimulationBtn" style="margin-top: 20px;">Run Simulation</button>
                 <!-- TODO: add UI support for downloading results data file -->
 
@@ -73,7 +76,7 @@
             </div>
         </div>
         <hr/>
-        <div class="row" style="border-style: solid; border-width: 1px;">
+        <div class="row">
             <canvas id="canvas" height="400" width="650"></canvas>
             <br>
         </div>

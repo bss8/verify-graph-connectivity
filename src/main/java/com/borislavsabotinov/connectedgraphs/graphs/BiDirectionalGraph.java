@@ -26,6 +26,8 @@ import java.util.logging.Logger;
  * Bi-directional, also referred to as undirected, graph.
  * When an edge from A to B is added, B to A is also added. This ensures
  * we can move in any direction between two given vertices with no restriction.
+ * Number of edge in undirected graph is (N * (N-1)) / 2
+ *
  * @param <T>
  */
 public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGraph<T> {
@@ -61,38 +63,34 @@ public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGr
     }
 
     public int determineNumEdges(int numVertices) {
-        if (numVertices == 0) {
+        if (numVertices <= 1) {
             return 0;
-        } else if (numVertices == 1) {
-            return 1;
         }
 
         int numEdgesToConnect = 0;
         setNumVertices(numVertices);
 
         ArrayList<T> listOfValues = new ArrayList<>();
-        ArrayList<String[]> listOfUniquePairs = new ArrayList<>();
+        ArrayList<String[]> listOfUniquePairs;
 
-        for (int i = 0; i < numVertices; i++) {
-            Faker faker = new Faker();
-            String name = faker.name().firstName();
-            addVertex((T) name);
-            listOfValues.add((T) name);
-        }
+        populateGraph(numVertices, listOfValues);
 
         listOfUniquePairs = findUniquePairs((ArrayList<String>) listOfValues);
         ArrayList<String[]> copyListOfPairs = new ArrayList<>(listOfUniquePairs);
 
         while (listOfUniquePairs.size() > 0) {
+            System.out.println("BI LOOPING! uniqueList size: " + listOfUniquePairs.size());
             // nextInt is normally exclusive of the top value, can add 1 to make it inclusive
             int randomNum = ThreadLocalRandom.current().nextInt(0, listOfUniquePairs.size());
             T[] edgePair = (T[]) listOfUniquePairs.get(randomNum);
 
             boolean isAddedTo = addEdge(edgePair[0], edgePair[1]);
             if (isAddedTo) {
+                System.out.println("ADDED EDGE!");
                 numEdgesToConnect++;
                 listOfUniquePairs.remove(edgePair);
                 if (isConnected(listOfValues.get(0))) {
+                    System.out.println("CONNECTED!");
                     return numEdgesToConnect;
                 }
             }
@@ -110,7 +108,7 @@ public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGr
         boolean isConnected = graph.isConnected("Suresh");
         System.out.println("Is connected? " + isConnected);
 
-        int numEdges = graph.determineNumEdges(50);
+        int numEdges = graph.determineNumEdges(100);
         System.out.println("# edges to connect? " + numEdges);
     }
 } // end class BiDirectionalGraph

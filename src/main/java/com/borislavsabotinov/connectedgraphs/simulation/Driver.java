@@ -31,14 +31,14 @@ public class Driver {
     UniDirectionalGraph<String> uniGraph;
     BiDirectionalGraph<String> biGraph;
 
-    public String executePredefinedSimulation() {
-        int numRuns = 20;
-        biGraph = new BiDirectionalGraph<>(String.class);
-        uniGraph = new UniDirectionalGraph<>(String.class);
+    public String executePredefinedSimulation(int numRuns) {
+        Map<String, ArrayList<Integer>> simulationResults = new TreeMap<>();
         ArrayList<Integer> biDirectionalResults = new ArrayList<>();
         ArrayList<Integer> uniDirectionalResults = new ArrayList<>();
 
-        for (int i = 0; i < numRuns; i ++) {
+        for (int i = 0; i <= numRuns; i ++) {
+            biGraph = new BiDirectionalGraph<>(String.class);
+            uniGraph = new UniDirectionalGraph<>(String.class);
             int numEdgesToConnectBiDirectionalGraph = biGraph.determineNumEdges(i);
             int numEdgesToConnectUniDirectionalGraph = uniGraph.determineNumEdges(i);
 
@@ -46,11 +46,16 @@ public class Driver {
             uniDirectionalResults.add(numEdgesToConnectUniDirectionalGraph);
         }
 
-        Map<String, ArrayList<Integer>> simulationResults = new TreeMap<>();
         simulationResults.put("biDirectionalResults", biDirectionalResults);
         simulationResults.put("uniDirectionalResults", uniDirectionalResults);
 
         Gson gson = new Gson();
         return gson.toJson(simulationResults);
+    }
+
+    public static void main(String...args) {
+        Driver driver = new Driver();
+        String simResult = driver.executePredefinedSimulation(25);
+        System.out.println(simResult);
     }
 } // end class Driver

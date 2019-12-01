@@ -39,6 +39,10 @@
   no-repeat;
 }
 
+canvas {
+  margin-left: 250px !important;
+}
+
 /* When the body has the loading class, we turn
    the scrollbar off with overflow:hidden */
 body.loading .modal {
@@ -49,4 +53,10 @@ body.loading .modal {
    modal element will be visible */
 body.loading .modal {
   display: block;
+}
+
+@media (max-width: 600px) {
+  #canvas {
+    margin-left: 80px !important;
+  }
 }

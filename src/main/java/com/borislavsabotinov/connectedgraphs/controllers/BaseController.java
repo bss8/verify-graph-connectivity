@@ -39,9 +39,9 @@ public class BaseController {
     }
 
     @GetMapping("/api/executePredefinedSimulation")
-    String executePredefinedSimulation() {
+    String executePredefinedSimulation(@RequestParam String numRuns) {
         Driver driver = new Driver();
-        String simResults = driver.executePredefinedSimulation();
+        String simResults = driver.executePredefinedSimulation(Integer.parseInt(numRuns));
         logger.info("simResults: " + simResults);
         return simResults;
     }
