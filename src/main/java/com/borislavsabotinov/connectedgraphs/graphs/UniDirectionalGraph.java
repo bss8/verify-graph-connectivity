@@ -139,14 +139,14 @@ public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicG
                 System.out.println("DID NOT remove unique pair from list 2");
             }
 
-//            if (!isAddedTo && !isAddedFrom) {
-//                listOfUniquePairs.remove(edgePair);
-//                listOfUniquePairs.remove(new String[]{(String) edgePair[1], (String) edgePair[0]});
-//                if (isConnected(listOfValues)) {
-//                    System.out.println("CONNECTED!");
-//                    return numEdgesToConnect;
-//                }
-//            }
+            if (!isAddedTo && !isAddedFrom) {
+                listOfUniquePairs.remove(edgePair);
+                listOfUniquePairs.remove(new String[]{(String) edgePair[1], (String) edgePair[0]});
+                if (isConnected(listOfValues)) {
+                    System.out.println("CONNECTED!");
+                    return numEdgesToConnect;
+                }
+            }
         }
 
         System.out.println("UNIDIRECTIONAL: If we see this, something went wrong! There is no graph connection!");

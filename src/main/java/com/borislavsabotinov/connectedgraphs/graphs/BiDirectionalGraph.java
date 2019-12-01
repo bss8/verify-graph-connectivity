@@ -78,8 +78,11 @@ public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGr
         listOfUniquePairs = findUniquePairs((ArrayList<String>) listOfValues);
         ArrayList<String[]> copyListOfPairs = new ArrayList<>(listOfUniquePairs);
 
-        while (listOfUniquePairs.size() > 0) {
+        while (!isConnected(listOfValues.get(0))) {
             System.out.println("BI LOOPING! uniqueList size: " + listOfUniquePairs.size());
+            if (listOfUniquePairs.size() == 0) {
+                return (numVertices * (numVertices -1))/2;
+            }
             // nextInt is normally exclusive of the top value, can add 1 to make it inclusive
             int randomNum = ThreadLocalRandom.current().nextInt(0, listOfUniquePairs.size());
             T[] edgePair = (T[]) listOfUniquePairs.get(randomNum);
@@ -93,6 +96,11 @@ public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGr
                     System.out.println("CONNECTED!");
                     return numEdgesToConnect;
                 }
+            }
+            if (listOfUniquePairs.remove(edgePair) ) {
+                System.out.println("removed unique pair from list 1");
+            } else {
+                System.out.println("DID NOT remove unique pair from list 1");
             }
         }
         System.out.println("If we see this, something went wrong! There is no graph connection!");

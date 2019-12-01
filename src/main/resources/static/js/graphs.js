@@ -19,6 +19,7 @@ $(document).ready(function () {
     let biDirectionalSelect = $('#biDirectional');
     let connectVerticesBtn = $('#connectVerticesBtn');
     let predefinedSimulationBtn = $('#predefinedSimulationBtn');
+    let numRunsInput = $('#numRuns');
     let origin = window.location.origin;
     let body = $("body");
 
@@ -51,15 +52,17 @@ $(document).ready(function () {
 
     predefinedSimulationBtn.click(function () {
         body.addClass("loading");
-        $.get(origin + "/api/executePredefinedSimulation")
-            .done(function(data) {
+        let numRuns = numRunsInput.val();
+        $.get(origin + "/api/executePredefinedSimulation", {
+            "numRuns": numRuns,
+        }) .done(function(data) {
                 console.log( "Invoking /api/executePredefinedSimulation for a simulation with preset values. \n" +
                     "Results: " + data);
                 let jsonData = JSON.parse(data);
                 console.log("biDirectional: " + jsonData.biDirectionalResults);
-                context.strokeStyle="#FF0066";
+                context.strokeStyle="#1648ff";
                 plotData(jsonData.biDirectionalResults);
-                context.strokeStyle="#9933FF";
+                context.strokeStyle="#e39934";
                 plotData(jsonData.uniDirectionalResults);
                 body.removeClass("loading");
         });
@@ -68,13 +71,13 @@ $(document).ready(function () {
     function init() {
         // set these values for your data
         sections = 9;
-        let maxVal = 400;
+        let maxVal = 130;
         let minVal = 0;
         const stepSize = 10;
         const columnSize = 50;
         const rowSize = 50;
         const margin = 10;
-        const xAxis = [" ", "5", "10", "15", "20", "25", "30", "35", "40", "45"];
+        const xAxis = ["0", "5", "10", "15", "20", "25", "30", "35", "40", "45"];
 
         let canvas = document.getElementById("canvas");
         context = canvas.getContext("2d");
@@ -112,7 +115,7 @@ $(document).ready(function () {
     function plotData(dataSet) {
         context.beginPath();
         context.moveTo(0, dataSet[0]);
-        for (let i=1; i<dataSet.length; i++) {
+        for (let i=1; i < dataSet.length; i++) {
             context.lineTo(i * xScale, dataSet[i]);
         }
         context.stroke();
