@@ -19,9 +19,12 @@ $(document).ready(function () {
     let directedSelect = $('#directed');
     let connectVerticesBtn = $('#connectVerticesBtn');
     let predefinedSimulationBtn = $('#predefinedSimulationBtn');
+    let downloadResultsBtn = $('#downloadResultsBtn');
     let numRunsInput = $('#numRuns');
     let origin = window.location.origin;
     let body = $("body");
+    let directedRes;
+    let undirectedRes;
 
     // Canvas variables
     let context ;
@@ -50,6 +53,26 @@ $(document).ready(function () {
 
     });
 
+    downloadResultsBtn.click(function () {
+        if (directedRes != null && undirectedRes != null) {
+            console.log("Downloading results CSV file.");
+            let data = '\n'; // workaround to separate <xml> start tag on first line
+            data += 'Directed,Undirected' + '\n';
+            for (let i = 0; i < directedRes.length; i++) {
+                data += directedRes[i] + "," + undirectedRes[i] + "\n";
+            }
+
+            let hiddenElement = document.createElement('a');
+            hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(data);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = 'simulation_results.csv';
+            hiddenElement.click();
+        } else {
+            console.log("Must run simulation first to obtain a result set!");
+            alert("Must run simulation first to obtain a result set!");
+        }
+    });
+
     predefinedSimulationBtn.click(function () {
         body.addClass("loading");
         let numRuns = numRunsInput.val();
@@ -59,6 +82,8 @@ $(document).ready(function () {
                 console.log( "Invoking /api/executePredefinedSimulation for a simulation with preset values. \n" +
                     "Results: " + data);
                 let jsonData = JSON.parse(data);
+                directedRes = jsonData.directedResults;
+                undirectedRes = jsonData.undirectedResults;
                 console.log("directed: " + jsonData.directedResults);
                 context.strokeStyle="#1648ff";
                 plotData(jsonData.directedResults);
