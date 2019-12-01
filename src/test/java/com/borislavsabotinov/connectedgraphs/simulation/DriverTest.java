@@ -24,11 +24,5 @@ class DriverTest {
         list.add("Sheryl");
     }
 
-    @Test
-    void findUniquePairs() {
 
-        ArrayList<String[]> uniquePairs = driver.findUniquePairs(list);
-        int idx = driver.getRandomNumberInRange(0, list.size()-1);
-        System.out.println(uniquePairs.get(idx));
-    }
 }

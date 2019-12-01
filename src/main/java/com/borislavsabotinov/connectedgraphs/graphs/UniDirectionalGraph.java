@@ -16,9 +16,10 @@
 
 package com.borislavsabotinov.connectedgraphs.graphs;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import com.github.javafaker.Faker;
+
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Uni-directional, also referred to as a directed, graph.
@@ -58,7 +59,6 @@ public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicG
         return this.type;
     }
 
-
     public boolean isConnected(ArrayList<T> listOfVertices) {
         if (listOfVertices.size() <= 1) {
             return true;
@@ -77,6 +77,56 @@ public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicG
         return isConnected;
     }
 
+    public int determineNumEdges(int numVertices) {
+        if (numVertices == 0) {
+            return 0;
+        } else if (numVertices == 1) {
+            return 1;
+        }
+
+        int numEdgesToConnect = 0;
+        setNumVertices(numVertices);
+
+        ArrayList<T> listOfValues = new ArrayList<>();
+        ArrayList<String[]> listOfUniquePairs = new ArrayList<>();
+
+        for (int i = 0; i < numVertices; i++) {
+            Faker faker = new Faker();
+            String name = faker.name().firstName();
+            addVertex((T) name);
+            listOfValues.add((T) name);
+        }
+
+        listOfUniquePairs = findUniquePairs((ArrayList<String>) listOfValues);
+        ArrayList<String[]> copyListOfPairs = new ArrayList<>(listOfUniquePairs);
+
+        // Try adding edges one way
+        while (listOfUniquePairs.size() > 0) {
+            // nextInt is normally exclusive of the top value, can add 1 to make it inclusive
+            int randomNum = ThreadLocalRandom.current().nextInt(0, listOfUniquePairs.size());
+            T[] edgePair = (T[]) listOfUniquePairs.get(randomNum);
+
+            boolean isAddedTo = addEdge(edgePair[0], edgePair[1]);
+            boolean isAddedFrom = addEdge(edgePair[1], edgePair[0]);
+            if (isAddedTo) {
+                numEdgesToConnect++;
+                listOfUniquePairs.remove(edgePair);
+                if (isConnected(listOfValues)) {
+                    return numEdgesToConnect;
+                }
+            } else if (isAddedFrom) {
+                numEdgesToConnect++;
+                listOfUniquePairs.remove(new String[]{(String) edgePair[1], (String) edgePair[0]});
+                if (isConnected(listOfValues)) {
+                    return numEdgesToConnect;
+                }
+            }
+        }
+
+        System.out.println("If we see this, something went wrong! There is no graph connection!");
+        return numEdgesToConnect;
+    }
+
     public static void main(String...args) {
         UniDirectionalGraph<String> graph = new UniDirectionalGraph<>(String.class);
         graph.initGraph(graph);
@@ -89,8 +139,12 @@ public class UniDirectionalGraph<T extends Comparable<? super T>> extends BasicG
         listOfKeys.add("Pawel");
         listOfKeys.add("Meyyappan");
         boolean isConnected = graph.isConnected(listOfKeys);
-        System.out.println("Is connected? " + isConnected);
+        System.out.println("Is connected - check all vertices as starting point? " + isConnected);
         isConnected = graph.isConnected("Pawel");
-        System.out.println("Is connected? " + isConnected);
+        System.out.println("Is connected starting at Pawel? " + isConnected);
+        ArrayList<String[]> stringList = graph.findUniquePairs(listOfKeys);
+        System.out.println("Unique pairs: " + Arrays.deepToString(stringList.toArray()));
+        int numEdges = graph.determineNumEdges(50);
+        System.out.println("# edges to connect? " + numEdges);
     }
 } // end class UniDirectionalGraph

@@ -16,6 +16,7 @@
 
 package com.borislavsabotinov.connectedgraphs.simulation;
 
+import com.borislavsabotinov.connectedgraphs.graphs.BasicGraph;
 import com.borislavsabotinov.connectedgraphs.graphs.BiDirectionalGraph;
 import com.borislavsabotinov.connectedgraphs.graphs.UniDirectionalGraph;
 import com.github.javafaker.Faker;
@@ -26,91 +27,20 @@ import java.util.logging.Logger;
 
 public class Driver {
     Logger logger = Logger.getLogger(Driver.class.getName());
-    BiDirectionalGraph<String> biDirectionalGraph;
-    UniDirectionalGraph<String> uniDirectionalGraph;
-
-    public Driver() {
-    }
-
-    public Driver(BiDirectionalGraph<String> biDirectionalGraph) {
-        this.biDirectionalGraph = biDirectionalGraph;
-    }
-
-    public Driver(UniDirectionalGraph<String> uniDirectionalGraph) {
-        this.uniDirectionalGraph = uniDirectionalGraph;
-    }
-
-    public int determineBiConnectivity(int numVertices) {
-        int numEdges = 0;
-        biDirectionalGraph.setNumVertices(numVertices);
-        ArrayList<String> arrayList = new ArrayList<>();
-
-        //populate graph with vertices
-        for (int i = 0; i < numVertices; i++) {
-            Faker faker = new Faker();
-            String randomName = faker.name().firstName();
-            biDirectionalGraph.addVertex(randomName);
-            arrayList.add(i, randomName);
-        }
-
-        logger.info("array: " + arrayList.toString());
-        logger.info("BiDirectional Graph obj: " + biDirectionalGraph.toString());
-        logger.info("arrayList size: " + arrayList.size());
-
-        for (int i = 0; i < arrayList.size(); i++) {
-            for (int j = 0; j < arrayList.size(); j++) {
-
-            }
-        }
-
-        logger.info(biDirectionalGraph.toString());
-
-        return numEdges;
-    }
-
-    public int determineUniConnectivity(int numVertices) {
-
-        int numEdges = 0;
-        uniDirectionalGraph.setNumVertices(numVertices);
-        ArrayList<String> arrayList = new ArrayList<>();
-
-        //populate graph with vertices
-        for (int i = 0; i < numVertices; i++) {
-            Faker faker = new Faker();
-            String randomName = faker.name().firstName();
-            uniDirectionalGraph.addVertex(randomName);
-            arrayList.add(i, randomName);
-        }
-
-        logger.info("array: " + arrayList.toString());
-        logger.info(uniDirectionalGraph.toString());
-        logger.info("arrayList size: " + arrayList.size());
-
-        ArrayList<String[]> uniquePairs = findUniquePairs(arrayList);
-        logger.info("uniquePairs: " + Arrays.deepToString(uniquePairs.toArray()));
-
-        while ((arrayList.size() > 0) &&
-                (!uniDirectionalGraph.isConnected(arrayList)) ) {
-            int randIntInRange = getRandomNumberInRange(0, arrayList.size() - 1);
-            String[] randomUniquePair = uniquePairs.get(randIntInRange);
-            uniquePairs.remove(randomUniquePair);
-            boolean isAdded = uniDirectionalGraph.addEdge(randomUniquePair[0], randomUniquePair[1]);
-            numEdges++;
-        }
-
-        return numEdges;
-    }
+    BasicGraph<String> graph;
+    UniDirectionalGraph<String> uniGraph;
+    BiDirectionalGraph<String> biGraph;
 
     public String executePredefinedSimulation() {
         int numRuns = 20;
-        biDirectionalGraph = new BiDirectionalGraph<>(String.class);
-        uniDirectionalGraph = new UniDirectionalGraph<>(String.class);
+        biGraph = new BiDirectionalGraph<>(String.class);
+        uniGraph = new UniDirectionalGraph<>(String.class);
         ArrayList<Integer> biDirectionalResults = new ArrayList<>();
         ArrayList<Integer> uniDirectionalResults = new ArrayList<>();
 
         for (int i = 0; i < numRuns; i ++) {
-            int numEdgesToConnectBiDirectionalGraph = determineBiConnectivity(i);
-            int numEdgesToConnectUniDirectionalGraph = determineUniConnectivity(i);
+            int numEdgesToConnectBiDirectionalGraph = biGraph.determineNumEdges(i);
+            int numEdgesToConnectUniDirectionalGraph = uniGraph.determineNumEdges(i);
 
             biDirectionalResults.add(numEdgesToConnectBiDirectionalGraph);
             uniDirectionalResults.add(numEdgesToConnectUniDirectionalGraph);
@@ -122,26 +52,5 @@ public class Driver {
 
         Gson gson = new Gson();
         return gson.toJson(simulationResults);
-    }
-
-    public int getRandomNumberInRange(int min, int max) {
-
-        if (min >= max) {
-            throw new IllegalArgumentException("max must be greater than min");
-        }
-
-        Random r = new Random();
-        return r.nextInt((max - min) + 1) + min;
-    }
-
-
-    public ArrayList<String[]> findUniquePairs(ArrayList<String> a) {
-        final ArrayList<String[]> pairs = new ArrayList<>();
-        for (int i = 0; i < a.size(); ++i) {
-            for (int j = i + 1; j < a.size(); ++j) {
-                pairs.add(new String[]{a.get(i), a.get(j)});
-            }
-        }
-        return pairs;
     }
 } // end class Driver

@@ -42,7 +42,7 @@ public class BaseController {
     String executePredefinedSimulation() {
         Driver driver = new Driver();
         String simResults = driver.executePredefinedSimulation();
-        logger.info("simResults: " + simResults.toString());
+        logger.info("simResults: " + simResults);
         return simResults;
     }
 
@@ -58,17 +58,14 @@ public class BaseController {
     }
 
     private int determineConnectivity(boolean isBiDirectional, int numVertices) {
-        Driver driver;
         int numEdgesToConnect;
 
         if (isBiDirectional) {
             BiDirectionalGraph<String> biDirectionalGraph = new BiDirectionalGraph<>(String.class);
-            driver = new Driver(biDirectionalGraph);
-            numEdgesToConnect = driver.determineBiConnectivity(numVertices);
+            numEdgesToConnect = biDirectionalGraph.determineNumEdges(numVertices);
         } else {
             UniDirectionalGraph<String> uniDirectionalGraph = new UniDirectionalGraph<>(String.class);
-            driver = new Driver(uniDirectionalGraph);
-            numEdgesToConnect = driver.determineUniConnectivity(numVertices);
+            numEdgesToConnect = uniDirectionalGraph.determineNumEdges(numVertices);
         }
 
         return numEdgesToConnect;

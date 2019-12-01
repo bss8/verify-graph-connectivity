@@ -136,6 +136,16 @@ public abstract class BasicGraph<T extends Comparable<? super T>> implements Gra
         this.numVertices = numVertices;
     }
 
+    public ArrayList<String[]> findUniquePairs(ArrayList<String> a) {
+        final ArrayList<String[]> pairs = new ArrayList<>();
+        for (int i = 0; i < a.size(); ++i) {
+            for (int j = i + 1; j < a.size(); ++j) {
+                pairs.add(new String[]{a.get(i), a.get(j)});
+            }
+        }
+        return pairs;
+    }
+
     /**
      * Helper method to populate the graph with test data
      * Five vertices and 6 edges
