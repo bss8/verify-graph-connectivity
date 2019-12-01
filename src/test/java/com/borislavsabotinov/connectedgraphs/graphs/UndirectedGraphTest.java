@@ -23,12 +23,12 @@ import java.util.Set;
 import static java.lang.System.out;
 import static org.junit.jupiter.api.Assertions.*;
 
-class BiDirectionalGraphTest {
-    BiDirectionalGraph<String> graph;
+class UndirectedGraphTest {
+    UndirectedGraph<String> graph;
 
     @BeforeEach
     void init() {
-        graph = new BiDirectionalGraph<>(String.class);
+        graph = new UndirectedGraph<>(String.class);
         graph.addVertex("Suresh");
         graph.addVertex("Meyyappan");
         graph.addVertex("Pawel");

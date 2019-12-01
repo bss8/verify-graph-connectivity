@@ -26,7 +26,7 @@ import java.util.Set;
 public interface Graph<T extends Comparable<? super T>> {
     void addVertex(T value);
     void removeVertex(T value);
-    boolean addEdge(T value1, T value2);
+    void addEdge(T value1, T value2);
     void removeEdge(T value1, T value2);
     List<BasicGraph<T>.Vertex> getAdjacentVertices(T value);
     Class<T> getMyType();

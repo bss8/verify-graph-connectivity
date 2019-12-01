@@ -16,12 +16,10 @@
 
 package com.borislavsabotinov.connectedgraphs.controllers;
 
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.borislavsabotinov.connectedgraphs.graphs.*;
 import com.borislavsabotinov.connectedgraphs.simulation.Driver;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,25 +45,25 @@ public class BaseController {
     }
 
     @GetMapping("/api/passGraphParams")
-    int passGraphParams(@RequestParam String numVertices, @RequestParam String isBiDirectional) {
+    int passGraphParams(@RequestParam String numVertices, @RequestParam String isUndirected) {
 
         logger.info("numVertices: " + numVertices);
-        logger.info("isBiDirectional: " + isBiDirectional);
+        logger.info("isUndirected: " + isUndirected);
 
-        int numEdgesToConnect = determineConnectivity(Boolean.parseBoolean(isBiDirectional), Integer.parseInt(numVertices));
+        int numEdgesToConnect = determineConnectivity(Boolean.parseBoolean(isUndirected), Integer.parseInt(numVertices));
         logger.info("# of (randomly generated) edges it takes to connect graph: " + numEdgesToConnect);
         return numEdgesToConnect;
     }
 
-    private int determineConnectivity(boolean isBiDirectional, int numVertices) {
+    private int determineConnectivity(boolean isUndirected, int numVertices) {
         int numEdgesToConnect;
 
-        if (isBiDirectional) {
-            BiDirectionalGraph<String> biDirectionalGraph = new BiDirectionalGraph<>(String.class);
-            numEdgesToConnect = biDirectionalGraph.determineNumEdges(numVertices);
+        if (isUndirected) {
+            UndirectedGraph<String> undirectedGraph = new UndirectedGraph<>(String.class);
+            numEdgesToConnect = undirectedGraph.determineNumEdges(numVertices);
         } else {
-            UniDirectionalGraph<String> uniDirectionalGraph = new UniDirectionalGraph<>(String.class);
-            numEdgesToConnect = uniDirectionalGraph.determineNumEdges(numVertices);
+            DirectedGraph<String> directedGraph = new DirectedGraph<>(String.class);
+            numEdgesToConnect = directedGraph.determineNumEdges(numVertices);
         }
 
         return numEdgesToConnect;

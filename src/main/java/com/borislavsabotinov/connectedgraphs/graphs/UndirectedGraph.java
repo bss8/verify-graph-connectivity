@@ -16,50 +16,41 @@
 
 package com.borislavsabotinov.connectedgraphs.graphs;
 
-import com.github.javafaker.Faker;
-
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Logger;
 
 /**
- * Bi-directional, also referred to as undirected, graph.
+ * Undirected, graph.
  * When an edge from A to B is added, B to A is also added. This ensures
  * we can move in any direction between two given vertices with no restriction.
  * Number of edge in undirected graph is (N * (N-1)) / 2
  *
  * @param <T>
  */
-public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGraph<T> {
+public class UndirectedGraph<T extends Comparable<? super T>> extends BasicGraph<T> {
 
-    public BiDirectionalGraph(Class<T> type) {
+    public UndirectedGraph(Class<T> type) {
         super(type);
     }
 
     @Override
-    public boolean addEdge(T value1, T value2) {
-        boolean addedEdge = false;
+    public void addEdge(T value1, T value2) {
         Vertex v1 = new Vertex(value1);
         Vertex v2 = new Vertex(value2);
-        if (!adjacencyMap.get(v1).contains(v2) &&
-                !adjacencyMap.get(v2).contains(v1)) {
-            adjacencyMap.get(v1).add(v2);
-            adjacencyMap.get(v2).add(v1);
-            addedEdge = true;
-        }
-        return addedEdge;
+        adjacencyMap.get(v1).add(v2);
+        adjacencyMap.get(v2).add(v1);
     }
 
     @Override
     public void removeEdge(T value1, T value2) {
         Vertex v1 = new Vertex(value1);
         Vertex v2 = new Vertex(value2);
-        List<Vertex> eV1 = adjacencyMap.get(v1);
-        List<Vertex> eV2 = adjacencyMap.get(v2);
-        if (eV1 != null)
-            eV1.remove(v2);
-        if (eV2 != null)
-            eV2.remove(v1);
+        List<Vertex> edgeV1 = adjacencyMap.get(v1);
+        List<Vertex> edgeV2 = adjacencyMap.get(v2);
+        if (edgeV1 != null)
+            edgeV1.remove(v2);
+        if (edgeV2 != null)
+            edgeV2.remove(v1);
     }
 
     public int determineNumEdges(int numVertices) {
@@ -68,55 +59,43 @@ public class BiDirectionalGraph<T extends Comparable<? super T>> extends BasicGr
         }
 
         int numEdgesToConnect = 0;
-        setNumVertices(numVertices);
+        this.setNumVertices(numVertices);
 
         ArrayList<T> listOfValues = new ArrayList<>();
-        ArrayList<String[]> listOfUniquePairs;
+        ArrayList<T[]> listOfUniquePairs;
 
-        populateGraph(numVertices, listOfValues);
+        this.populateGraph(numVertices, listOfValues);
 
-        listOfUniquePairs = findUniquePairs((ArrayList<String>) listOfValues);
-        ArrayList<String[]> copyListOfPairs = new ArrayList<>(listOfUniquePairs);
+        listOfUniquePairs = this.findUniquePairs( listOfValues);
 
         while (!isConnected(listOfValues.get(0))) {
-            System.out.println("BI LOOPING! uniqueList size: " + listOfUniquePairs.size());
+            System.out.println("UNDIRECTED GRAPH - LOOPING! uniqueList size: " + listOfUniquePairs.size());
             if (listOfUniquePairs.size() == 0) {
                 return (numVertices * (numVertices -1))/2;
             }
             // nextInt is normally exclusive of the top value, can add 1 to make it inclusive
             int randomNum = ThreadLocalRandom.current().nextInt(0, listOfUniquePairs.size());
-            T[] edgePair = (T[]) listOfUniquePairs.get(randomNum);
+            T[] edgePair = listOfUniquePairs.get(randomNum);
 
-            boolean isAddedTo = addEdge(edgePair[0], edgePair[1]);
-            if (isAddedTo) {
-                System.out.println("ADDED EDGE!");
-                numEdgesToConnect++;
-                listOfUniquePairs.remove(edgePair);
-                if (isConnected(listOfValues.get(0))) {
-                    System.out.println("CONNECTED!");
-                    return numEdgesToConnect;
-                }
-            }
-            if (listOfUniquePairs.remove(edgePair) ) {
-                System.out.println("removed unique pair from list 1");
-            } else {
-                System.out.println("DID NOT remove unique pair from list 1");
-            }
+            addEdge(edgePair[0], edgePair[1]);
+            System.out.println("Added undirected edge!");
+            numEdgesToConnect++;
+            listOfUniquePairs.remove(edgePair);  // remove from unique pair list
         }
-        System.out.println("If we see this, something went wrong! There is no graph connection!");
+
         return numEdgesToConnect;
     }
 
 
     public static void main(String...args) {
-        BiDirectionalGraph<String> graph = new BiDirectionalGraph<>(String.class);
+        UndirectedGraph<String> graph = new UndirectedGraph<>(String.class);
         graph.initGraph(graph);
         System.out.println(graph.toString());
         System.out.println(graph.getAdjacentVertices("Stephanie").toString());
         boolean isConnected = graph.isConnected("Suresh");
         System.out.println("Is connected? " + isConnected);
 
-        int numEdges = graph.determineNumEdges(100);
+        int numEdges = graph.determineNumEdges(80);
         System.out.println("# edges to connect? " + numEdges);
     }
-} // end class BiDirectionalGraph
+} // end class UndirectedGraph

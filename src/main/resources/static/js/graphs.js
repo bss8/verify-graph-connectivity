@@ -16,7 +16,7 @@
 
 $(document).ready(function () {
     let numVerticesInput = $('#numVertices');
-    let biDirectionalSelect = $('#biDirectional');
+    let directedSelect = $('#directed');
     let connectVerticesBtn = $('#connectVerticesBtn');
     let predefinedSimulationBtn = $('#predefinedSimulationBtn');
     let numRunsInput = $('#numRuns');
@@ -33,15 +33,15 @@ $(document).ready(function () {
 
     connectVerticesBtn.click(function () {
         let numVertices = numVerticesInput.val();
-        let isBiDirectional = biDirectionalSelect.is(':checked');
+        let isUndirected = directedSelect.is(':checked');
 
         console.log("N: " + numVertices);
-        console.log("isBiDirectional: " + isBiDirectional);
+        console.log("isUndirected: " + isUndirected);
 
         body.addClass("loading");
         $.get(origin + "/api/passGraphParams", {
             "numVertices": numVertices,
-            "isBiDirectional": isBiDirectional
+            "isUndirected": isUndirected
         }) .done(function(data) {
             console.log( "Invoking /api/passGraphParams for a single graph. # edges to connect: " + data );
             $('#singleGraphResult').val(data.toString());
@@ -59,11 +59,11 @@ $(document).ready(function () {
                 console.log( "Invoking /api/executePredefinedSimulation for a simulation with preset values. \n" +
                     "Results: " + data);
                 let jsonData = JSON.parse(data);
-                console.log("biDirectional: " + jsonData.biDirectionalResults);
+                console.log("directed: " + jsonData.directedResults);
                 context.strokeStyle="#1648ff";
-                plotData(jsonData.biDirectionalResults);
+                plotData(jsonData.directedResults);
                 context.strokeStyle="#e39934";
-                plotData(jsonData.uniDirectionalResults);
+                plotData(jsonData.undirectedResults);
                 body.removeClass("loading");
         });
     });

@@ -50,11 +50,11 @@
                     <label for="numVertices"></label>
                     <input type="number" min="0" class="form-control" id="numVertices"
                            aria-describedby="numVertices" placeholder="# Vertices (N)" oninput="validity.valid||(value='');" />
-                    <small id="numVerticesHelp" class="form-text text-muted">Numeric values only, N >= 2. Uni-directional (Default)</small>
+                    <small id="numVerticesHelp" class="form-text text-muted">Numeric values only, N >= 2. Undirected (Default)</small>
                 </div>
                 <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="biDirectional" />
-                    <label class="form-check-label" for="biDirectional">Bi-directional</label>
+                    <input type="checkbox" class="form-check-input" id="directed" checked/>
+                    <label class="form-check-label" for="directed">Undirected</label>
                 </div>
                 <button class="btn btn-primary" id="connectVerticesBtn">Connect Vertices</button>
                 <label for="singleGraphResult">Result: </label>
@@ -82,8 +82,8 @@
             <canvas id="canvas" height="400" width="650"></canvas>
             <br>
             <!--Legends for Dataplot -->
-            <span style="color:#1648ff"> Bi-Directional </span>
-            <span style="color:#e39934"> Uni-Directional</span>
+            <span style="color:#1648ff"> Directed </span>
+            <span style="color:#e39934"> Undirected </span>
         </div>
 
     </div>

@@ -17,9 +17,8 @@
 package com.borislavsabotinov.connectedgraphs.simulation;
 
 import com.borislavsabotinov.connectedgraphs.graphs.BasicGraph;
-import com.borislavsabotinov.connectedgraphs.graphs.BiDirectionalGraph;
-import com.borislavsabotinov.connectedgraphs.graphs.UniDirectionalGraph;
-import com.github.javafaker.Faker;
+import com.borislavsabotinov.connectedgraphs.graphs.UndirectedGraph;
+import com.borislavsabotinov.connectedgraphs.graphs.DirectedGraph;
 import com.google.gson.Gson;
 
 import java.util.*;
@@ -28,26 +27,26 @@ import java.util.logging.Logger;
 public class Driver {
     Logger logger = Logger.getLogger(Driver.class.getName());
     BasicGraph<String> graph;
-    UniDirectionalGraph<String> uniGraph;
-    BiDirectionalGraph<String> biGraph;
+    DirectedGraph<String> uniGraph;
+    UndirectedGraph<String> biGraph;
 
     public String executePredefinedSimulation(int numRuns) {
         Map<String, ArrayList<Integer>> simulationResults = new TreeMap<>();
-        ArrayList<Integer> biDirectionalResults = new ArrayList<>();
-        ArrayList<Integer> uniDirectionalResults = new ArrayList<>();
+        ArrayList<Integer> directedResults = new ArrayList<>();
+        ArrayList<Integer> undirectedResults = new ArrayList<>();
 
         for (int i = 0; i <= numRuns; i ++) {
-            biGraph = new BiDirectionalGraph<>(String.class);
-            uniGraph = new UniDirectionalGraph<>(String.class);
-            int numEdgesToConnectBiDirectionalGraph = biGraph.determineNumEdges(i);
-            int numEdgesToConnectUniDirectionalGraph = uniGraph.determineNumEdges(i);
+            biGraph = new UndirectedGraph<>(String.class);
+            uniGraph = new DirectedGraph<>(String.class);
+            int numEdgesToConnectUndirectedGraph = biGraph.determineNumEdges(i);
+            int numEdgesToConnectDirectedGraph = uniGraph.determineNumEdges(i);
 
-            biDirectionalResults.add(numEdgesToConnectBiDirectionalGraph);
-            uniDirectionalResults.add(numEdgesToConnectUniDirectionalGraph);
+            directedResults.add(numEdgesToConnectUndirectedGraph);
+            undirectedResults.add(numEdgesToConnectDirectedGraph);
         }
 
-        simulationResults.put("biDirectionalResults", biDirectionalResults);
-        simulationResults.put("uniDirectionalResults", uniDirectionalResults);
+        simulationResults.put("directedResults", directedResults);
+        simulationResults.put("undirectedResults", undirectedResults);
 
         Gson gson = new Gson();
         return gson.toJson(simulationResults);

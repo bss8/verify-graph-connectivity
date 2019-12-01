@@ -33,7 +33,7 @@ import java.util.*;
 public abstract class BasicGraph<T extends Comparable<? super T>> implements Graph<T>, GraphTraversal<T> {
     Map<Vertex, List<Vertex>> adjacencyMap;
     final Class<T> type;
-    int numVertices;
+    private int numVertices;
 
     BasicGraph(Class<T> type) {
         this.adjacencyMap = new HashMap<Vertex, List<Vertex>>();
@@ -57,7 +57,7 @@ public abstract class BasicGraph<T extends Comparable<? super T>> implements Gra
     }
 
     @Override
-    public abstract boolean addEdge(T value1, T value2);
+    public abstract void addEdge(T value1, T value2);
 
     @Override
     public abstract void removeEdge(T value1, T value2);
@@ -111,7 +111,7 @@ public abstract class BasicGraph<T extends Comparable<? super T>> implements Gra
         boolean isConnected = false;
         Set<T> tmpSet = depthFirstSearch(key);
 
-        if (getNumVertices() == tmpSet.size()) {
+        if (getNumVertices() <= tmpSet.size()) {
             isConnected = true;
         }
         return isConnected;
@@ -144,12 +144,12 @@ public abstract class BasicGraph<T extends Comparable<? super T>> implements Gra
      * @param a
      * @return
      */
-    public ArrayList<String[]> findUniquePairs(ArrayList<String> a) {
-        final ArrayList<String[]> pairs = new ArrayList<>();
+    public ArrayList<T[]> findUniquePairs(ArrayList<T> a) {
+        final ArrayList<T[]> pairs = new ArrayList<>();
         for (int i = 0; i < a.size(); ++i) {
             for (int j = 0; j < a.size(); ++j) {
-                if (a.get(i).equals(a.get(j))) continue;
-                pairs.add(new String[]{a.get(i), a.get(j)});
+//                if (a.get(i).equals(a.get(j))) continue;
+                pairs.add((T[]) new String[]{String.valueOf(a.get(i)), String.valueOf(a.get(j))});
             }
         }
         return pairs;
