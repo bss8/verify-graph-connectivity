@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class BaseController {
+    Logger logger = Logger.getLogger(BaseController.class.getName());
     @Value("${TARGET:World}")
     String message;
 
@@ -36,33 +37,33 @@ public class BaseController {
     }
 
     @GetMapping("/api/executePredefinedSimulation")
-    void executePredefinedSimulation() {
-        // TODO: execute predefined simulation model with static values
+    String executePredefinedSimulation(@RequestParam String numRuns) {
+        Driver driver = new Driver();
+        String simResults = driver.executePredefinedSimulation(Integer.parseInt(numRuns));
+        logger.info("simResults: " + simResults);
+        return simResults;
     }
 
     @GetMapping("/api/passGraphParams")
-    int passGraphParams(@RequestParam String numVertices, @RequestParam String isBiDirectional) {
-        Logger logger = Logger.getLogger(BaseController.class.getName());
-        logger.info("numVertices: " + numVertices);
-        logger.info("isBiDirectional: " + isBiDirectional);
+    int passGraphParams(@RequestParam String numVertices, @RequestParam String isUndirected) {
 
-        int numEdgesToConnect = determineConnectivity(Boolean.parseBoolean(isBiDirectional), Integer.parseInt(numVertices));
+        logger.info("numVertices: " + numVertices);
+        logger.info("isUndirected: " + isUndirected);
+
+        int numEdgesToConnect = determineConnectivity(Boolean.parseBoolean(isUndirected), Integer.parseInt(numVertices));
         logger.info("# of (randomly generated) edges it takes to connect graph: " + numEdgesToConnect);
         return numEdgesToConnect;
     }
 
-    private int determineConnectivity(boolean isBiDirectional, int numVertices) {
-        Driver driver;
+    private int determineConnectivity(boolean isUndirected, int numVertices) {
         int numEdgesToConnect;
 
-        if (isBiDirectional) {
-            BiDirectionalGraph<String> biDirectionalGraph = new BiDirectionalGraph<>(String.class);
-            driver = new Driver(biDirectionalGraph);
-            numEdgesToConnect = driver.determineBiConnectivity(numVertices);
+        if (isUndirected) {
+            UndirectedGraph<String> undirectedGraph = new UndirectedGraph<>(String.class);
+            numEdgesToConnect = undirectedGraph.determineNumEdges(numVertices);
         } else {
-            UniDirectionalGraph<String> uniDirectionalGraph = new UniDirectionalGraph<>(String.class);
-            driver = new Driver(uniDirectionalGraph);
-            numEdgesToConnect = driver.determineUniConnectivity(numVertices);
+            DirectedGraph<String> directedGraph = new DirectedGraph<>(String.class);
+            numEdgesToConnect = directedGraph.determineNumEdges(numVertices);
         }
 
         return numEdgesToConnect;

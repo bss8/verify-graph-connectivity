@@ -37,6 +37,10 @@
             <strong>Select "Run Simulation"</strong> - a pre-defined simulation for N=2 to N=500 will be executed, with <br/>
             the number of edges it takes to connect the graph (x-axis) plotted against N (y-axis).
         </div>
+        <div class="alert alert-warning">
+            Try to keep # of vertices (N) under 50 to avoid performance issues. <br/>
+            If you do not get a result in ~1min, refresh the page and try again.
+        </div>
     </div>
 
     <div class="container">
@@ -44,13 +48,13 @@
             <div class="col-md containerShadow">
                 <div class="form-group">
                     <label for="numVertices"></label>
-                    <input type="number" min="2" class="form-control" id="numVertices"
+                    <input type="number" min="0" class="form-control" id="numVertices"
                            aria-describedby="numVertices" placeholder="# Vertices (N)" oninput="validity.valid||(value='');" />
-                    <small id="numVerticesHelp" class="form-text text-muted">Numeric values only, N >= 2. Uni-directional (Default)</small>
+                    <small id="numVerticesHelp" class="form-text text-muted">Numeric values only, N >= 2. Undirected (Default)</small>
                 </div>
                 <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="biDirectional" />
-                    <label class="form-check-label" for="biDirectional">Bi-directional</label>
+                    <input type="checkbox" class="form-check-input" id="directed" checked/>
+                    <label class="form-check-label" for="directed">Undirected</label>
                 </div>
                 <button class="btn btn-primary" id="connectVerticesBtn">Connect Vertices</button>
                 <label for="singleGraphResult">Result: </label>
@@ -58,7 +62,10 @@
             </div>
             <div class="col-sm-1"></div>
             <div class="col-sm containerShadow">
-                <button class="btn btn-secondary" style="margin-top: 20px;">Run Simulation</button>
+                <label for="numRuns"></label>
+                <input type="number" min="0" class="form-control" id="numRuns"
+                       aria-describedby="numRuns" placeholder="# of runs" oninput="validity.valid||(value='');" />
+                <button class="btn btn-secondary" id="predefinedSimulationBtn" style="margin-top: 20px;">Run Simulation</button>
                 <!-- TODO: add UI support for downloading results data file -->
 
                 <br/><br/>
@@ -69,11 +76,20 @@
             </div>
         </div>
         <hr/>
-        <div class="row" style="border-style: solid; border-width: 1px;">
-            <canvas id="myCanvas"></canvas>
+
+        <div align="center">
+            <h2>Number of Expected Edges Given a Number of Vertices</h2>
+            <canvas id="canvas" height="400" width="650"></canvas>
+            <br>
+            <!--Legends for Dataplot -->
+            <span style="color:#1648ff"> Directed </span>
+            <span style="color:#e39934"> Undirected </span>
         </div>
+
     </div>
 
+    <br/> <br/> <br/>
+    <div class="modal"><!-- Place at bottom of page --></div>
 </body>
 
 </html>

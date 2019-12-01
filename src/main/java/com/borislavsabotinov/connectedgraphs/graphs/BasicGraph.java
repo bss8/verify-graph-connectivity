@@ -16,6 +16,8 @@
 
 package com.borislavsabotinov.connectedgraphs.graphs;
 
+import com.github.javafaker.Faker;
+
 import java.util.*;
 
 /**
@@ -31,7 +33,7 @@ import java.util.*;
 public abstract class BasicGraph<T extends Comparable<? super T>> implements Graph<T>, GraphTraversal<T> {
     Map<Vertex, List<Vertex>> adjacencyMap;
     final Class<T> type;
-    int numVertices;
+    private int numVertices;
 
     BasicGraph(Class<T> type) {
         this.adjacencyMap = new HashMap<Vertex, List<Vertex>>();
@@ -55,7 +57,7 @@ public abstract class BasicGraph<T extends Comparable<? super T>> implements Gra
     }
 
     @Override
-    public abstract boolean addEdge(T value1, T value2);
+    public abstract void addEdge(T value1, T value2);
 
     @Override
     public abstract void removeEdge(T value1, T value2);
@@ -102,10 +104,14 @@ public abstract class BasicGraph<T extends Comparable<? super T>> implements Gra
 
     @Override
     public boolean isConnected(T key) {
+        if (getNumVertices() <= 1) {
+            return true;
+        }
+
         boolean isConnected = false;
         Set<T> tmpSet = depthFirstSearch(key);
 
-        if (getNumVertices() == tmpSet.size()) {
+        if (getNumVertices() <= tmpSet.size()) {
             isConnected = true;
         }
         return isConnected;
@@ -130,6 +136,32 @@ public abstract class BasicGraph<T extends Comparable<? super T>> implements Gra
     @Override
     public void setNumVertices(int numVertices) {
         this.numVertices = numVertices;
+    }
+
+    /**
+     * if j = i+1 then we generate unique pairs (i.e., ab and ba are considered the same)
+     * if j = 0 then we generate all paris (i.e., ab and ba are considered different)
+     * @param a
+     * @return
+     */
+    public ArrayList<T[]> findUniquePairs(ArrayList<T> a) {
+        final ArrayList<T[]> pairs = new ArrayList<>();
+        for (int i = 0; i < a.size(); ++i) {
+            for (int j = 0; j < a.size(); ++j) {
+//                if (a.get(i).equals(a.get(j))) continue;
+                pairs.add((T[]) new String[]{String.valueOf(a.get(i)), String.valueOf(a.get(j))});
+            }
+        }
+        return pairs;
+    }
+
+    void populateGraph(int numVertices, ArrayList<T> listOfValues) {
+        for (int i = 0; i < numVertices; i++) {
+            Faker faker = new Faker();
+            String name = faker.name().firstName();
+            addVertex((T) name);
+            listOfValues.add((T) name);
+        }
     }
 
     /**

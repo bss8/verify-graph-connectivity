@@ -16,132 +16,45 @@
 
 package com.borislavsabotinov.connectedgraphs.simulation;
 
-import com.borislavsabotinov.connectedgraphs.graphs.BiDirectionalGraph;
-import com.borislavsabotinov.connectedgraphs.graphs.UniDirectionalGraph;
-import com.github.javafaker.Faker;
+import com.borislavsabotinov.connectedgraphs.graphs.BasicGraph;
+import com.borislavsabotinov.connectedgraphs.graphs.UndirectedGraph;
+import com.borislavsabotinov.connectedgraphs.graphs.DirectedGraph;
+import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Logger;
-
-import static java.lang.System.currentTimeMillis;
 
 public class Driver {
     Logger logger = Logger.getLogger(Driver.class.getName());
-    BiDirectionalGraph<String> biDirectionalGraph;
-    UniDirectionalGraph<String> uniDirectionalGraph;
+    BasicGraph<String> graph;
+    DirectedGraph<String> uniGraph;
+    UndirectedGraph<String> biGraph;
 
-    public Driver(BiDirectionalGraph<String> biDirectionalGraph) {
-        this.biDirectionalGraph = biDirectionalGraph;
+    public String executePredefinedSimulation(int numRuns) {
+        Map<String, ArrayList<Integer>> simulationResults = new TreeMap<>();
+        ArrayList<Integer> directedResults = new ArrayList<>();
+        ArrayList<Integer> undirectedResults = new ArrayList<>();
+
+        for (int i = 0; i <= numRuns; i ++) {
+            biGraph = new UndirectedGraph<>(String.class);
+            uniGraph = new DirectedGraph<>(String.class);
+            int numEdgesToConnectUndirectedGraph = biGraph.determineNumEdges(i);
+            int numEdgesToConnectDirectedGraph = uniGraph.determineNumEdges(i);
+
+            directedResults.add(numEdgesToConnectUndirectedGraph);
+            undirectedResults.add(numEdgesToConnectDirectedGraph);
+        }
+
+        simulationResults.put("directedResults", directedResults);
+        simulationResults.put("undirectedResults", undirectedResults);
+
+        Gson gson = new Gson();
+        return gson.toJson(simulationResults);
     }
 
-    public Driver(UniDirectionalGraph<String> uniDirectionalGraph) {
-        this.uniDirectionalGraph = uniDirectionalGraph;
-    }
-
-    public int determineBiConnectivity(int numVertices) {
-        int numEdges = 0;
-        biDirectionalGraph.setNumVertices(numVertices);
-        ArrayList<String> arrayList = new ArrayList<>();
-
-        //populate graph with vertices
-        for (int i = 0; i < numVertices; i++) {
-            Faker faker = new Faker();
-            String randomName = faker.name().firstName();
-            biDirectionalGraph.addVertex(randomName);
-            arrayList.add(i, randomName);
-        }
-        logger.info("array: " + arrayList.toString());
-        logger.info(biDirectionalGraph.toString());
-        logger.info("arrayList size: " + arrayList.size());
-
-        while (! biDirectionalGraph.isConnected(arrayList.get(0))) {
-            String name1 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
-            String name2 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
-            logger.info(name1 + name2);
-
-            if (!name1.equals(name2)) {
-                boolean isAdded = biDirectionalGraph.addEdge(name1, name2);
-                if(isAdded) {
-                    numEdges++;
-                }
-            }
-        }
-
-        logger.info(biDirectionalGraph.toString());
-
-        return numEdges;
-    }
-
-    public int determineUniConnectivity(int numVertices) {
-
-        int numEdges = 0;
-        uniDirectionalGraph.setNumVertices(numVertices);
-        ArrayList<String> arrayList = new ArrayList<>();
-
-        //populate graph with vertices
-        for (int i = 0; i < numVertices; i++) {
-            Faker faker = new Faker();
-            String randomName = faker.name().firstName();
-            uniDirectionalGraph.addVertex(randomName);
-            arrayList.add(i, randomName);
-        }
-        logger.info("array: " + arrayList.toString());
-        logger.info(uniDirectionalGraph.toString());
-        logger.info("arrayList size: " + arrayList.size());
-
-        while (! uniDirectionalGraph.isConnected(arrayList)) {
-            String name1 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
-            String name2 = arrayList.get(getRandomNumberInRange(0, arrayList.size()-1));
-            logger.info(name1 + name2);
-
-            if (!name1.equals(name2)) {
-                boolean isAdded = uniDirectionalGraph.addEdge(name1, name2);
-
-                if(isAdded) {
-                    logger.info("edge added.....");
-                    numEdges++;
-                }
-            }
-        }
-
-        logger.info(uniDirectionalGraph.toString());
-
-
-        return numEdges;
-    }
-
-    public ArrayList<Integer[]> executePredefinedSimulation() {
-        int numVertices = 500;  // equivalent to # of runs
-        biDirectionalGraph = new BiDirectionalGraph<>(String.class);
-        uniDirectionalGraph = new UniDirectionalGraph<>(String.class);
-        Integer[] uniDirectionalResults = new Integer[numVertices];
-        Integer[] biDirectionalResults = new Integer[numVertices];
-
-
-        for (int i = 1; i < numVertices; i ++) {
-            int numEdgesToConnectBiDirectionalGraph = determineBiConnectivity(i+1);
-            int numEdgesToConnectUniDirectionalGraph = determineUniConnectivity(i+1);
-
-            biDirectionalResults[i] = numEdgesToConnectBiDirectionalGraph;
-            uniDirectionalResults[i] = numEdgesToConnectUniDirectionalGraph;
-        }
-
-        ArrayList<Integer[]> simulationResults = new ArrayList<>();
-        simulationResults.add(biDirectionalResults);
-        simulationResults.add(uniDirectionalResults);
-
-        return simulationResults;
-    }
-
-    private static int getRandomNumberInRange(int min, int max) {
-
-        if (min >= max) {
-            throw new IllegalArgumentException("max must be greater than min");
-        }
-
-        Random r = new Random();
-        return r.nextInt((max - min) + 1) + min;
+    public static void main(String...args) {
+        Driver driver = new Driver();
+        String simResult = driver.executePredefinedSimulation(25);
+        System.out.println(simResult);
     }
 } // end class Driver
