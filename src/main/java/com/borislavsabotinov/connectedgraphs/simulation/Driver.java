@@ -27,8 +27,8 @@ import java.util.logging.Logger;
 public class Driver {
     Logger logger = Logger.getLogger(Driver.class.getName());
     BasicGraph<String> graph;
-    DirectedGraph<String> uniGraph;
-    UndirectedGraph<String> biGraph;
+    DirectedGraph<String> directedGraph;
+    UndirectedGraph<String> undirectedGraph;
 
     public String executePredefinedSimulation(int numRuns) {
         Map<String, ArrayList<Integer>> simulationResults = new TreeMap<>();
@@ -36,13 +36,13 @@ public class Driver {
         ArrayList<Integer> undirectedResults = new ArrayList<>();
 
         for (int i = 0; i <= numRuns; i ++) {
-            biGraph = new UndirectedGraph<>(String.class);
-            uniGraph = new DirectedGraph<>(String.class);
-            int numEdgesToConnectUndirectedGraph = biGraph.determineNumEdges(i);
-            int numEdgesToConnectDirectedGraph = uniGraph.determineNumEdges(i);
+            undirectedGraph = new UndirectedGraph<>(String.class);
+            directedGraph = new DirectedGraph<>(String.class);
+            int numEdgesToConnectUndirectedGraph = undirectedGraph.determineNumEdges(i);
+            int numEdgesToConnectDirectedGraph = directedGraph.determineNumEdges(i);
 
-            directedResults.add(numEdgesToConnectUndirectedGraph);
-            undirectedResults.add(numEdgesToConnectDirectedGraph);
+            directedResults.add(numEdgesToConnectDirectedGraph);
+            undirectedResults.add(numEdgesToConnectUndirectedGraph);
         }
 
         simulationResults.put("directedResults", directedResults);
