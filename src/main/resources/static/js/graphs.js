@@ -14,6 +14,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Canvas chart based on: http://www.tutorialspark.com/html5/HTML5_Canvas_Graphs_Charts.php
+ *
+ */
+
 $(document).ready(function () {
     let numVerticesInput = $('#numVertices');
     let directedSelect = $('#directed');
@@ -94,15 +99,17 @@ $(document).ready(function () {
     });
 
     function init() {
-        // set these values for your data
-        sections = 9;
+        sections = 31;
         let maxVal = 130;
-        let minVal = 0;
+        let minVal = -1;
         const stepSize = 10;
         const columnSize = 50;
-        const rowSize = 50;
-        const margin = 10;
-        const xAxis = ["0", "5", "10", "15", "20", "25", "30", "35", "40", "45"];
+        const rowSize = 25;
+        const margin = 5;
+        const xAxis = [];
+        for (let i = -1; i < 31; i++) {
+            xAxis.push(i);
+        }
 
         let canvas = document.getElementById("canvas");
         context = canvas.getContext("2d");
@@ -140,7 +147,7 @@ $(document).ready(function () {
     function plotData(dataSet) {
         context.beginPath();
         context.moveTo(0, dataSet[0]);
-        for (let i=1; i < dataSet.length; i++) {
+        for (let i=1; i < sections; i++) {
             context.lineTo(i * xScale, dataSet[i]);
         }
         context.stroke();
